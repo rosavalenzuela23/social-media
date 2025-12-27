@@ -1,5 +1,3 @@
-const Conexion = require("./Conexion");
-const DAO = require("./DAO")
 
 class UsuariosDAO extends DAO {
     
