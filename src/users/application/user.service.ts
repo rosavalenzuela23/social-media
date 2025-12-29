@@ -1,8 +1,8 @@
 import { UserAlreadyExistsException, UserNotFoundException } from "./exceptions";
-import IUserRepository from "./ports/UserRepository"
+import IUserRepository from "./ports/user.repository"
 import bcrypt from "bcrypt";
 
-export default class BusinessLogic {
+export default class UserService {
 
     constructor(
         private userRepository: IUserRepository
@@ -57,35 +57,6 @@ export default class BusinessLogic {
     //     return encontrado
     // }
 
-    // async agregarUsuario(bodyReq) {
-
-    //     //Verificar que no haya uno con el mismo username
-    //     let encontrado = await this.buscarPorUserName(bodyReq.body.username)
-
-    //     if (encontrado != null) {
-    //         throw new UsuarioExistenteError("El usuario ya existe en la base de datos")
-    //     }
-
-    //     const userInfo = bodyReq.body
-    //     const user = new Usuario(
-    //         userInfo.name,
-    //         userInfo.username,
-    //         userInfo.password
-    //     )
-    //     const dao = new UsuariosDAO()
-    //     const uuid = await dao.insertarUno(user.toJSON())
-    //     await agregarUsuario()
-    //     return uuid
-    // }
-
-    // async inicioDeSesion(req) {
-    //     const body = req.body
-    //     const daousuarios = new UsuariosDAO()
-    //     const usuario = await daousuarios
-    //         .obtenerPorUserNameYPassword(body.username, body.password)
-    //     return usuario
-    // }
-
     async addFriend(username: string, usernameFriend: string) {
         const user = await this.userRepository.getUserByUsername(username)
 
@@ -99,11 +70,10 @@ export default class BusinessLogic {
             throw new UserNotFoundException("User not found");
         }
 
-        user.uuidFriendList.push(userFriend.uuid);
-        userFriend.uuidFriendList.push(user.uuid);
+        user.addFriend(userFriend);
+        userFriend.addFriend(user);
 
-        await this.userRepository.updateUser(user);
-        await this.userRepository.updateUser(userFriend);
+        await this.userRepository.addFriend(user, userFriend);
     }
 
     async login(username: string, plainPassword: string) {

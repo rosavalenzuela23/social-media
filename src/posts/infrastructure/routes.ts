@@ -1,26 +1,15 @@
 import { FastifyInstance } from "fastify";
-import BusinessLogic from "../application/businessLogic";
-import MongoRepository from "./mongo-repository";
+import createPostSchema from "./schemas/post.schema";
+import { createPost, getAllPosts, getUserLoggedPosts, getUserPosts } from "./handlers/post.handler";
 
-const businessLogic = new BusinessLogic(
-    new MongoRepository()
-);
+
 
 async function routes(fastify: FastifyInstance, options: any) {
     const defaultRoute = "/api/posts";
-
-    fastify.get(defaultRoute + '/', async (req, res) => {
-        if (!req.session.username) {
-            res.status(401);
-        }
-
-        return businessLogic.getUserPosts(req.cookies.uuid);
-    });
-
-    fastify.post(defaultRoute + '/', async (req, res) => {
-
-    });
-
+    fastify.get(defaultRoute + '/users/:uuid', getUserPosts);
+    fastify.get(defaultRoute + '/me/', getUserLoggedPosts);
+    fastify.get(defaultRoute + '/', getAllPosts);
+    fastify.post(defaultRoute + '/', { schema: createPostSchema }, createPost);
 }
 
 export default routes;
