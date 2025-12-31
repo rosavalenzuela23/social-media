@@ -254,7 +254,7 @@ fastifyApp.register(userRoutes);
 (async () => {
     try {
         await fastifyApp.listen({
-            port: 8080
+            port: process.env.APP_PORT || 3000
         })
     } catch (err) {
         fastifyApp.log.error(err)
