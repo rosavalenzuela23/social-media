@@ -1,12 +1,14 @@
+import { FastifyRequest } from "fastify";
 import { UserAlreadyExistsException, UserNotFoundException } from "../../application/exceptions";
 import UserService from "../../application/user.service";
 import MongoRepository from "../persistance/repositories/mongo.repository";
+import { FastifyReply } from "fastify";
 
 const userService = new UserService(
     new MongoRepository()
 );
 
-async function login(request, reply) {
+async function login(request: FastifyRequest, reply: FastifyReply) {
     const body = request.body as { username: string, password: string };
 
     try {
@@ -32,12 +34,12 @@ async function login(request, reply) {
     }
 }
 
-async function logout(request) {
+async function logout(request: FastifyRequest) {
     request.session.destroy();
     return { message: "Session destroyed" };
 }
 
-async function createUser(request, reply) {
+async function createUser(request: FastifyRequest, reply: FastifyReply) {
     const body = request.body as { username: string, password: string };
 
     try {

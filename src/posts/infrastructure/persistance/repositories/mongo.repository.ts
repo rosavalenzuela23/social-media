@@ -1,5 +1,5 @@
 import IPostRepository from "../../../application/ports/post.repository";
-import datasource from "../../../../shared/infrastructure/mongo-connection";
+import datasource from "../../../../shared/infrastructure/persistance/mongo-connection";
 import Post from "../../../domain/post";
 import PostEntity from "../entities/post.entity";
 import PostMapper from "../mappers/post.mapper";

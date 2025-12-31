@@ -1,5 +1,5 @@
 import IUserRepository from "../../../application/ports/user.repository";
-import datasorce from "../../../../shared/infrastructure/mongo-connection";
+import datasorce from "../../../../shared/infrastructure/persistance/mongo-connection";
 import User from "../../../domain/user";
 import UserEntity from "../entities/user.entity";
 import UserMapper from "../mappers/user.mapper";

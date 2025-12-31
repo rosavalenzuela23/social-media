@@ -16,4 +16,10 @@ export default class PostEntity {
     @Column({ type: "date" })
     createdAt: Date;
 
+    @Column({ type: "array" })
+    postImages: string[]
+
+    @Column({ type: "array" })
+    comments: PostEntity[];
+
 }
