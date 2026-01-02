@@ -4,3 +4,4 @@ test-pages/
 test/
 .env
 public/upload/
+dist/

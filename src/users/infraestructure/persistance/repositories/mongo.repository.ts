@@ -1,9 +1,9 @@
-import IUserRepository from "../../../application/ports/user.repository";
-import datasorce from "../../../../shared/infrastructure/persistance/mongo-connection";
-import User from "../../../domain/user";
-import UserEntity from "../entities/user.entity";
-import UserMapper from "../mappers/user.mapper";
-import type { Entity, EntityManager } from "typeorm";
+import type IUserRepository from "@users//application/ports/user.repository.js";
+import { appDataSource as datasorce } from "@shared/infrastructure/persistance/mongo-connection.js";
+import User from "@users/domain/user.js";
+import UserEntity from "@users/infraestructure/persistance/entities/user.entity.js";
+import UserMapper from "@users/infraestructure/persistance/mappers/user.mapper.js";
+import type { EntityManager } from "typeorm";
 
 export default class MongoRepository implements IUserRepository {
 

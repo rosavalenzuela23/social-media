@@ -1,5 +1,5 @@
-import Post from "../domain/post";
-import IPostRepository from "./ports/post.repository";
+import Post from "@posts/domain/post.js";
+import type IPostRepository from "@posts/application/ports/post.repository.js";
 
 
 export default class PostService {

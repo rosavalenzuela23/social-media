@@ -1,5 +1,5 @@
-import User from "../../../domain/user";
-import UserEntity from "../entities/user.entity";
+import User from "@users/domain/user.js";
+import UserEntity from "@users/infraestructure/persistance/entities/user.entity.js";
 
 export default class UserMapper {
 

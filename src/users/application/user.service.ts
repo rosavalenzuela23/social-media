@@ -1,5 +1,5 @@
-import { UserAlreadyExistsException, UserNotFoundException } from "./exceptions";
-import IUserRepository from "./ports/user.repository"
+import { UserAlreadyExistsException, UserNotFoundException } from "@users/application/exceptions.js";
+import type IUserRepository from "@users/application/ports/user.repository.js"
 import bcrypt from "bcrypt";
 
 export default class UserService {

@@ -1,8 +1,7 @@
-import { FastifyRequest } from "fastify";
-import { UserAlreadyExistsException, UserNotFoundException } from "../../application/exceptions";
-import UserService from "../../application/user.service";
-import MongoRepository from "../persistance/repositories/mongo.repository";
-import { FastifyReply } from "fastify";
+import type { FastifyRequest, FastifyReply } from "fastify";
+import { UserAlreadyExistsException, UserNotFoundException } from "@users/application/exceptions.js";
+import UserService from "@users/application/user.service.js";
+import MongoRepository from "@users/infraestructure/persistance/repositories/mongo.repository.js";
 
 const userService = new UserService(
     new MongoRepository()

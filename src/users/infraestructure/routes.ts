@@ -1,7 +1,7 @@
-import { FastifyInstance } from "fastify";
-import createUserSchema from "./schemas/create-user.schema";
-import { login, logout, getAllUsers, createUser } from "./handlers/user.handler";
-import { requireAuth } from "../../shared/infrastructure/fastify/auth-hook";
+import type { FastifyInstance } from "fastify";
+import createUserSchema from "@users/infraestructure/schemas/create-user.schema.js";
+import { login, logout, getAllUsers, createUser } from "@users/infraestructure/handlers/user.handler.js";
+import { requireAuth } from "@shared/infrastructure/fastify/auth-hook.js";
 
 
 

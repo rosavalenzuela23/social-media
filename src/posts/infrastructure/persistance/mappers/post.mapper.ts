@@ -1,5 +1,5 @@
-import Post from "../../../domain/post";
-import PostEntity from "../entities/post.entity";
+import Post from "@posts/domain/post.js";
+import PostEntity from "@posts/infrastructure/persistance/entities/post.entity.js";
 
 export default class PostMapper {
     static toEntity(post: Post): PostEntity {

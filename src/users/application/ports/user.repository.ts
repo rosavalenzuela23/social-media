@@ -1,4 +1,4 @@
-import User from "../../domain/user";
+import User from "@users/domain/user.js";
 
 export default interface IUserRepository {
     getAllUsers(): Promise<User[]>

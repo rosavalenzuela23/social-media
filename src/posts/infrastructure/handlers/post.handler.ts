@@ -1,13 +1,14 @@
-import { FastifyRequest } from "fastify";
-import PostService from "../../application/posts.service";
-import MongoRepository from "../persistance/repositories/mongo.repository";
-import { FastifyReply } from "fastify";
+import type { FastifyRequest, FastifyReply } from "fastify";
+import PostService from "@posts/application/posts.service.js";
+import type { IdUserParams } from './types/types.js'
+import MongoRepository from "@posts/infrastructure/persistance/repositories/mongo.repository.js";
 
 const postsService = new PostService(
     new MongoRepository()
 );
 
-async function getUserPosts(request: FastifyRequest, reply: FastifyReply) {
+async function getUserPosts(request: FastifyRequest<{ Params: IdUserParams }>, reply: FastifyReply) {
+
     if (!request.session.user) {
         reply.status(401);
         return { message: "Unauthorized" };

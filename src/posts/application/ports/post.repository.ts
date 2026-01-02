@@ -1,4 +1,4 @@
-import Post from "../../domain/post"
+import Post from "@posts/domain/post.js"
 
 export default interface IPostRepository {
     getAllPosts(): Promise<Post[]>

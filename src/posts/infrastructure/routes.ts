@@ -1,7 +1,7 @@
-import { FastifyInstance } from "fastify";
-import createPostSchema from "./schemas/post.schema";
-import { createPost, getAllPosts, getUserLoggedPosts, getUserPosts } from "./handlers/post.handler";
-import { requireAuth } from "../../shared/infrastructure/fastify/auth-hook";
+import type { FastifyInstance } from "fastify";
+import createPostSchema from "@posts/infrastructure/schemas/post.schema.js";
+import { createPost, getAllPosts, getUserLoggedPosts, getUserPosts } from "@posts/infrastructure/handlers/post.handler.js";
+import { requireAuth } from "@shared/infrastructure/fastify/auth-hook.js";
 
 async function routes(fastify: FastifyInstance, options: any) {
     const defaultRoute = "/api/posts";

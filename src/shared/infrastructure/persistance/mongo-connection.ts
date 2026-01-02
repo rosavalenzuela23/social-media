@@ -7,16 +7,20 @@ const appDataSource = new DataSource({
     host: process.env.DB_HOST || "localhost",
     port: dbPort,
     database: "social_media",
-    entities: ["./**/*.entity.ts"],
+    entities: ["./**/*.entity.js"],
+    connectTimeoutMS: 500,
     synchronize: true,
     logging: true,
 });
 
-appDataSource.initialize().then(() => {
-    console.log("Data Source has been initialized!")
-}).catch((err) => {
-    console.error("Error during Data Source initialization", err)
-    throw new Error("Error during Data Source initialization")
-})
+const initDb = async () => {
+    try {
+        await appDataSource.initialize();
+        console.log("Connected to MongoDB");
+    } catch (error) {
+        console.error("Error connecting to MongoDB:", error);
+        throw error;
+    }
+};
 
-export default appDataSource;
+export { appDataSource, initDb }

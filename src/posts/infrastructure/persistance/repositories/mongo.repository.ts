@@ -1,8 +1,8 @@
-import IPostRepository from "../../../application/ports/post.repository";
-import datasource from "../../../../shared/infrastructure/persistance/mongo-connection";
-import Post from "../../../domain/post";
-import PostEntity from "../entities/post.entity";
-import PostMapper from "../mappers/post.mapper";
+import type IPostRepository from "@posts/application/ports/post.repository.js";
+import { appDataSource as datasource } from "@shared/infrastructure/persistance/mongo-connection.js";
+import Post from "@posts/domain/post.js";
+import PostEntity from "@posts/infrastructure/persistance/entities/post.entity.js";
+import PostMapper from "@posts/infrastructure/persistance/mappers/post.mapper.js";
 
 export default class MongoRepository implements IPostRepository {
 
