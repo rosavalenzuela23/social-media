@@ -1,5 +1,5 @@
-import { Column, Entity, ObjectId, ObjectIdColumn } from "typeorm";
-
+import { Column, Entity, ObjectId, ObjectIdColumn, OneToMany } from "typeorm";
+import ImageEntity from "./image.entity.js";
 
 @Entity("posts")
 export default class PostEntity {
@@ -16,10 +16,10 @@ export default class PostEntity {
     @Column({ type: "date" })
     createdAt: Date;
 
-    @Column({ type: "array" })
-    postImages: string[]
+    @Column(type => ImageEntity)
+    postImages: ImageEntity[] = [];
 
-    @Column({ type: "array" })
+    @OneToMany(() => PostEntity, post => post.comments)
     comments: PostEntity[];
 
-}
+} 

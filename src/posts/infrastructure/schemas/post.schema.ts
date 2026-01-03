@@ -18,8 +18,7 @@ const createPostSchema = {
     required: ['content'],
     properties: {
         content: {
-            type: "string",
-            minLength: 1
+            type: "object",
         },
         images: {
             anyOf: [
@@ -31,7 +30,7 @@ const createPostSchema = {
             ]
         }
     },
-    additionalProperties: false,
+    additionalProperties: true,
     nullable: false
 }
 

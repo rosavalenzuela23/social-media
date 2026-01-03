@@ -28,6 +28,7 @@
     "multer": "^2.0.2",
     "nodemon": "^2.0.22",
     "normalize.css": "^8.0.1",
+    "sharp": "^0.34.5",
     "typeorm": "^0.3.28",
     "uuid": "^13.0.0"
   },

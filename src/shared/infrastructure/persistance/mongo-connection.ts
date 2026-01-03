@@ -7,7 +7,7 @@ const appDataSource = new DataSource({
     host: process.env.DB_HOST || "localhost",
     port: dbPort,
     database: "social_media",
-    entities: ["./**/*.entity.js"],
+    entities: ["./**/*.entity.*"],
     connectTimeoutMS: 500,
     synchronize: true,
     logging: true,
