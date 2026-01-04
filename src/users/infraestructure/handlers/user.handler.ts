@@ -48,7 +48,7 @@ async function createUser(request: FastifyRequest, reply: FastifyReply) {
             reply.status(400);
             return {
                 message: error.message
-            }
+            };
         }
 
         throw error;
@@ -64,4 +64,4 @@ export {
     logout,
     getAllUsers,
     createUser
-}
+};
