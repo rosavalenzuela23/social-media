@@ -1,4 +1,4 @@
-import { Column, ObjectId, ObjectIdColumn } from "typeorm";
+import { Column, Index, ObjectId, ObjectIdColumn } from "typeorm";
 
 export default class ImageEntity {
 
@@ -8,7 +8,8 @@ export default class ImageEntity {
     @Column({ type: "varchar" })
     path: string;
 
-    @Column({ type: "varchar", unique: true })
+    @Column({ type: "varchar" })
+    @Index({ unique: true, sparse: true })
     uuid: string;
 
 } 

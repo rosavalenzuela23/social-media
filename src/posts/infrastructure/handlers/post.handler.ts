@@ -1,11 +1,12 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
 import PostService from "@posts/application/posts.service.js";
-import type { IdUserParams } from './types/types.js'
+import type { IdUserParams } from './types/types.js';
 import MongoRepository from "@posts/infrastructure/persistance/repositories/mongo.repository.js";
-import { ReadableStream } from "node:stream/web";
+import SharpManager from "@posts/infrastructure/utils/sharp.converter.js";
 
 const postsService = new PostService(
-    new MongoRepository()
+    new MongoRepository(),
+    new SharpManager(process.env.UPLOAD_FOLDER || './public/images/')
 );
 
 async function getUserPosts(request: FastifyRequest<{ Params: IdUserParams }>, reply: FastifyReply) {
@@ -32,24 +33,34 @@ async function getImageByuuid(request: FastifyRequest<{ Params: { uuid: string }
 
     reply
         .type('image/webp')
-        .header('Content-Disposition', 'attachment; filename="image.webp"')
-        .send(stream);
+        .header('Content-Disposition', 'attachment; filename="image.webp"');
+
+    return stream;
 }
 
 async function createPost(request: FastifyRequest<{
     Body: {
-        message: string,
-        images?: any[]
+        content: { value: string },
+        images?: any[] | any
     }
 }>) {
 
-    const buffers = [];
-    for (let image of request.body.images) {
-        const buffer = await image.toBuffer();
-        buffers.push(buffer);
+    let images = request.body.images;
+
+    if (request.body.images && !Array.isArray(request.body.images)) {
+        images = [request.body.images];   
     }
 
-    return await postsService.createPost(request.session.user.uuid, request.body.message, buffers);
+    const buffers = [];
+
+    if (images) {
+        for (const image of images) {
+            const buffer = await image.toBuffer();
+            buffers.push(buffer);
+        }
+    }
+
+    return await postsService.createPost(request.session.user.uuid, request.body.content.value, buffers);
 }
 
 export {
@@ -58,4 +69,4 @@ export {
     getAllPosts,
     createPost,
     getImageByuuid
-}
+};
