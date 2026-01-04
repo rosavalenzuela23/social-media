@@ -3,5 +3,5 @@ coverage/
 test-pages/
 test/
 .env
-public/upload/
+upload/
 dist/
