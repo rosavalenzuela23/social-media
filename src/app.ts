@@ -2,6 +2,8 @@ import "dotenv/config";
 import fastify from 'fastify';
 import fastifyCookie from '@fastify/cookie';
 import fastifySession from '@fastify/session';
+import fastifySwagger from '@fastify/swagger';
+import fastifySwaggerUi from '@fastify/swagger-ui';
 import postRoutes from '@posts/infrastructure/routes.js';
 import userRoutes from '@users/infraestructure/routes.js';
 import multipart from '@fastify/multipart';
@@ -23,7 +25,7 @@ const envToLogger = {
 
 const fastifyApp = fastify({
     logger: envToLogger["development"]
-})
+});
 
 fastifyApp.register(multipart, {
     attachFieldsToBody: true,
@@ -35,6 +37,29 @@ fastifyApp.register(multipart, {
 });
 
 /* Middleware */
+
+if (process.env.ENVIRONMENT !== 'production') {
+    fastifyApp.register(fastifySwagger, {
+        openapi: {
+            info: {
+                title: 'Social Media API',
+                description: 'Fastify API documentation',
+                version: 'A-0.0.1',
+            }
+        }
+    });
+
+    fastifyApp.register(fastifySwaggerUi, {
+        routePrefix: '/api/docs',
+        uiConfig: {
+            deepLinking: false
+        },
+        staticCSP: true,
+        transformSpecificationClone: true
+    });
+}
+
+
 fastifyApp.register(fastifyCookie);
 fastifyApp.register(fastifySession, {
     cookieName: 'session',
@@ -43,7 +68,7 @@ fastifyApp.register(fastifySession, {
     cookie: {
         secure: false
     }
-})
+});
 
 /* Routes */
 fastifyApp.register(postRoutes);
@@ -51,12 +76,12 @@ fastifyApp.register(userRoutes);
 
 (async () => {
     try {
-        await initDb()
+        await initDb();
         fastifyApp.listen({
             port: parseInt(process.env.APP_PORT) || 3000
-        })
+        });
     } catch (err) {
-        fastifyApp.log.error(err)
-        process.exit(1)
+        fastifyApp.log.error(err);
+        process.exit(1);
     }
-})()
+})();
