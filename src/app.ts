@@ -3,10 +3,12 @@ import fastify from 'fastify';
 import fastifyCookie from '@fastify/cookie';
 import fastifySession from '@fastify/session';
 import fastifySwagger from '@fastify/swagger';
+import fastifyCors from "@fastify/cors";
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import postRoutes from '@posts/infrastructure/routes.js';
 import userRoutes from '@users/infraestructure/routes.js';
 import multipart from '@fastify/multipart';
+import fs from 'fs';
 import { initDb } from "@shared/infrastructure/persistance/mongo-connection.js";
 
 const envToLogger = {
@@ -24,7 +26,12 @@ const envToLogger = {
 };
 
 const fastifyApp = fastify({
-    logger: envToLogger["development"]
+    logger: envToLogger["development"],
+    http2: true,
+    https: {
+        key: fs.readFileSync(process.env.SSL_KEY_PATH),
+        cert: fs.readFileSync(process.env.SSL_CERT_PATH)
+    }
 });
 
 fastifyApp.register(multipart, {
@@ -59,6 +66,11 @@ if (process.env.ENVIRONMENT !== 'production') {
     });
 }
 
+fastifyApp.register(fastifyCors, {
+    credentials: true,
+    origin: ['http://localhost:5173'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+});
 
 fastifyApp.register(fastifyCookie);
 fastifyApp.register(fastifySession, {
@@ -66,7 +78,10 @@ fastifyApp.register(fastifySession, {
     secret: process.env.FASTIFY_SESSION_SECRET,
     store: new fastifySession.MemoryStore(),
     cookie: {
-        secure: false
+        secure: false,
+        httpOnly: true,
+        path: "/",
+        sameSite: "lax",
     }
 });
 
@@ -76,7 +91,9 @@ fastifyApp.register(userRoutes);
 
 (async () => {
     try {
+        fastifyApp.log.info("Connecting to DB");
         await initDb();
+        fastifyApp.log.info("DB connected");
         fastifyApp.listen({
             port: parseInt(process.env.APP_PORT) || 3000
         });

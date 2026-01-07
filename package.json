@@ -7,12 +7,14 @@
   "scripts": {
     "dev": "bun run --watch ./src/app.js",
     "build": "bun build --minify ./src/app.js --outdir ./dist/app.js",
+    "create:certs": "mkdir -p ssl && openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout ./ssl/test.key -out ./ssl/test.crt -subj /C=US/ST=State/L=City/O=Organization/OU=Department/CN=localhost",
     "test": "jest --coverage"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@fastify/cookie": "^11.0.2",
+    "@fastify/cors": "^11.2.0",
     "@fastify/multipart": "^9.3.0",
     "@fastify/session": "^11.1.1",
     "bcrypt": "^6.0.0",
