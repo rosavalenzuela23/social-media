@@ -14,15 +14,15 @@
       "@posts/*": [
         "./src/posts/*"
       ],
-      "@users/*": [
-        "./src/users/*"
+      "@auth/*": [
+        "./src/auth/*"
       ],
       "@shared/*": [
         "./src/shared/*"
       ]
     },
     "module": "nodenext",
-    "noEmitOnError": true,
+    "noEmitOnError": false,
     "removeComments": true,
     "target": "esnext",
     "sourceMap": true,
