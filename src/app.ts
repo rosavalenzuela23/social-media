@@ -6,7 +6,7 @@ import fastifySwagger from '@fastify/swagger';
 import fastifyCors from "@fastify/cors";
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import postRoutes from '@posts/infrastructure/routes.js';
-import userRoutes from '@users/infraestructure/routes.js';
+import userRoutes from '@auth/infraestructure/routes.js';
 import multipart from '@fastify/multipart';
 import fs from 'fs';
 import { initDb } from "@shared/infrastructure/persistance/mongo-connection.js";
@@ -29,6 +29,7 @@ const fastifyApp = fastify({
     logger: envToLogger["development"],
     http2: true,
     https: {
+        allowHTTP1: true,
         key: fs.readFileSync(process.env.SSL_KEY_PATH),
         cert: fs.readFileSync(process.env.SSL_CERT_PATH)
     }
