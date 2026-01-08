@@ -23,4 +23,4 @@ const initDb = async () => {
     }
 };
 
-export { appDataSource, initDb }
+export { appDataSource, initDb };
