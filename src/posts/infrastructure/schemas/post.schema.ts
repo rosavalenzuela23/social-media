@@ -11,7 +11,7 @@ const fileSchema = {
             minLength: 1
         }
     }
-}
+};
 
 const createPostSchema = {
     type: "object",
@@ -32,6 +32,6 @@ const createPostSchema = {
     },
     additionalProperties: true,
     nullable: false
-}
+};
 
 export default { body: createPostSchema };

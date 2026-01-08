@@ -14,10 +14,11 @@ export default class PostMapper {
 
     static toDomain(postEntity: PostEntity): Post {
         return new Post(
-            postEntity.creatorUuid, 
-            postEntity.message, 
-            postEntity.createdAt, 
-            postEntity.postImages.map(path => ImageMapper.toDomain(path)), 
+            postEntity.creatorUuid,
+            postEntity.creatorUsername,
+            postEntity.message,
+            postEntity.createdAt,
+            postEntity.postImages?.map(path => ImageMapper.toDomain(path)),
             postEntity.comments?.map(comment => PostMapper.toDomain(comment))
         );
     }

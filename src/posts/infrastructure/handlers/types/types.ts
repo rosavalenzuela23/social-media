@@ -2,4 +2,4 @@ interface IdUserParams {
     uuid: string
 }
 
-export type { IdUserParams }
+export type { IdUserParams };

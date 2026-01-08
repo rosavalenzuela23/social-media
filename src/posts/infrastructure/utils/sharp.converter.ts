@@ -6,14 +6,15 @@ import type { ReadStream } from "typeorm/platform/PlatformTools.js";
 
 class SharpManager implements FileManager {
 
-    constructor(private filePath: string) { 
+    constructor(private filePath: string) {
         if (!fs.existsSync(filePath)) {
             fs.mkdirSync(filePath, { recursive: true });
         }
     }
 
     async saveImage(buffer: Buffer, name: string): Promise<void> {
-        await sharp(buffer).toFile(this.filePath + name + '.webp');
+        const bufferImage = sharp(buffer);
+        await bufferImage.toFile(this.filePath + name + '.webp');
     }
 
     async deleteFile(name: string): Promise<void> {
@@ -23,7 +24,7 @@ class SharpManager implements FileManager {
                     reject(err);
                 } else {
                     resolve();
-                }   
+                }
             });
         });
 
@@ -36,6 +37,6 @@ class SharpManager implements FileManager {
     }
 
 
-} 
+}
 
 export default SharpManager;

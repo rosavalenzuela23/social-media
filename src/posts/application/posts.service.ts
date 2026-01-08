@@ -1,7 +1,6 @@
 import Post from "@posts/domain/post.js";
 import type { IPostRepository } from "@posts/application/ports/post.repository.js";
 import { ReadStream } from 'fs';
-import path from 'path';
 import { v4 as uuidv4 } from "uuid";
 import Image from "../domain/image.js";
 import type { FileManager } from "@posts/application/ports/file.manager.js";
@@ -23,18 +22,18 @@ export default class PostService {
         return await this.postRepository.getUserPosts(creatorUuid);
     }
 
-    async createPost(userUuid: string, message: string, imagesBuffer?: Buffer[]) {
+    async createPost(userUuid: string, username: string, message: string, imagesBuffer?: Buffer[]) {
         //Obtener toda la informacion del usuario
         const images: Image[] = [];
         try {
             for (const buffer of imagesBuffer) {
                 const uuid = uuidv4();
-                this.fileManager.saveImage(buffer, uuid);
-                const image = new Image(path.join(__dirname, 'uploads', 'images', uuid + '.webp'), uuid);
+                await this.fileManager.saveImage(buffer, uuid);
+                const image = new Image(uuid + '.webp', uuid);
                 images.push(image);
             }
-            
-            const post = new Post(userUuid, message, new Date(), images);
+
+            const post = new Post(userUuid, username, message, new Date(), images);
             return await this.postRepository.createPost(post);
         } catch (error) {
             console.log(error);

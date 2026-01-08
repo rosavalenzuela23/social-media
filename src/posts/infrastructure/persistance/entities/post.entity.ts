@@ -11,6 +11,9 @@ export default class PostEntity {
     creatorUuid: string;
 
     @Column({ type: "varchar" })
+    creatorUsername: string;
+
+    @Column({ type: "varchar" })
     message: string;
 
     @Column({ type: "date" })
