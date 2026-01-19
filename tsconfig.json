@@ -1,0 +1,50 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "moduleResolution": "node16",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types"
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@posts/*": [
+        "./src/posts/*"
+      ],
+      "@auth/*": [
+        "./src/auth/*"
+      ],
+      "@shared/*": [
+        "./src/shared/*"
+      ]
+    },
+    "module": "nodenext",
+    "noEmitOnError": false,
+    "removeComments": true,
+    "target": "esnext",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noUncheckedIndexedAccess": true,
+    "strict": false,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "eslint.config.ts",
+    "dist"
+  ],
+  "typescript.experimental.useTsgo": true,
+}
