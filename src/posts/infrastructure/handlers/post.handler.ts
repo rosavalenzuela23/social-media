@@ -2,8 +2,10 @@ import type { FastifyRequest, FastifyReply } from "fastify";
 import PostService from "@posts/application/posts.service.js";
 import type { IdUserParams } from "./types/types.js";
 import MongoRepository from "@posts/infrastructure/persistance/repositories/mongo.repository.js";
+import ProfileMongoRepository from "@/profiles/infraestructure/persistance/repositories/mongo.repository.js";
 import SharpManager from "@posts/infrastructure/utils/sharp.converter.js";
-import { UPLOAD_DIR } from "../utils/paths.js";
+import UserExternalService from "../external-services/user.module.adapter.js";
+import UserService from "@/profiles/application/user.service.js";
 
 class PostController {
   private static _instance: PostController | null = null;
@@ -13,7 +15,10 @@ class PostController {
   private constructor() {
     this.postsService = new PostService(
       new MongoRepository(),
-      new SharpManager(UPLOAD_DIR),
+      UserExternalService.getInstance(
+        new UserService(new ProfileMongoRepository()),
+      ),
+      new SharpManager(process.env.UPLOAD_FOLDER),
     );
   }
 
@@ -38,8 +43,21 @@ class PostController {
     return await this.postsService.getUserPosts(userId);
   }
 
-  async getAllPosts() {
-    return await this.postsService.getAllPosts();
+  async getAllPosts(
+    request: FastifyRequest<{
+      Querystring: {
+        page: number;
+        size: number;
+      };
+    }>,
+  ) {
+    const page = request.query.page;
+    const size = request.query.size;
+    return await this.postsService.getAllPosts(
+      page,
+      size,
+      request.session.user.uuid,
+    );
   }
 
   async getImageByuuid(

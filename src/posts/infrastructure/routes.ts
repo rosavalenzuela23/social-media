@@ -2,6 +2,7 @@ import type { FastifyInstance } from "fastify";
 import createPostSchema from "@posts/infrastructure/schemas/post.schema.js";
 import PostController from "@posts/infrastructure/handlers/post.handler.js";
 import { requireAuth } from "@shared/infrastructure/fastify/auth-hook.js";
+import getPostsPageSchema from "./schemas/get-posts.schema.js";
 
 const controller = PostController.instance;
 
@@ -20,7 +21,11 @@ async function routes(fastify: FastifyInstance) {
     defaultRoute + "/me/",
     controller.getUserLoggedPosts.bind(controller),
   );
-  fastify.get(defaultRoute + "/", controller.getAllPosts.bind(controller));
+  fastify.get(
+    defaultRoute + "/",
+    { schema: getPostsPageSchema },
+    controller.getAllPosts.bind(controller),
+  );
   fastify.post(
     defaultRoute + "/",
     { schema: createPostSchema },

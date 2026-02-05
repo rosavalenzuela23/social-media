@@ -8,7 +8,7 @@
       "@/*": ["./src/*"],
       "@posts/*": ["./src/posts/*"],
       "@auth/*": ["./src/auth/*"],
-      "@users/*": ["./src/users/*"],
+      "@profiles/*": ["./src/profiles/*"],
       "@shared/*": ["./src/shared/*"]
     },
     "module": "nodenext",

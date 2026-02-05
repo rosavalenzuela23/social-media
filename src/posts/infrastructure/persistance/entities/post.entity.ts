@@ -3,26 +3,27 @@ import ImageEntity from "./image.entity.js";
 
 @Entity("posts")
 export default class PostEntity {
+  @ObjectIdColumn()
+  id: ObjectId;
 
-    @ObjectIdColumn()
-    id: ObjectId;
+  @Column({ type: "varchar" })
+  creatorUuid: string;
 
-    @Column({ type: "varchar" })
-    creatorUuid: string;
+  @Column({ type: "varchar" })
+  creatorUsername: string;
 
-    @Column({ type: "varchar" })
-    creatorUsername: string;
+  @Column({ type: "varchar" })
+  message: string;
 
-    @Column({ type: "varchar" })
-    message: string;
+  @Column({ type: "date" })
+  createdAt: Date;
 
-    @Column({ type: "date" })
-    createdAt: Date;
+  @Column({ type: "array" })
+  userUuidExcludeList: string[];
 
-    @Column(type => ImageEntity)
-    postImages: ImageEntity[] = [];
+  @Column((type) => ImageEntity)
+  postImages: ImageEntity[] = [];
 
-    @OneToMany(() => PostEntity, post => post.comments)
-    comments: PostEntity[];
-
-} 
+  @OneToMany(() => PostEntity, (post) => post.comments)
+  comments: PostEntity[];
+}

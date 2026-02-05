@@ -4,15 +4,31 @@ import { ReadStream } from "fs";
 import { v4 as uuidv4 } from "uuid";
 import Image from "../domain/image.js";
 import type { FileManager } from "@posts/application/ports/file.manager.js";
+import type { IUserModulePort } from "./ports/users.module.port.js";
 
 export default class PostService {
   constructor(
     private postRepository: IPostRepository,
+    private userModulePort: IUserModulePort,
     private fileManager: FileManager,
   ) {}
 
-  async getAllPosts() {
-    return await this.postRepository.getAllPosts();
+  async getAllPosts(page: number, size: number, userUuid: string) {
+    let blockedUsersUuid: string[] = [];
+
+    try {
+      blockedUsersUuid =
+        await this.userModulePort.getBlockedUsersUuid(userUuid);
+    } catch (error) {
+      console.error(error);
+    }
+
+    return await this.postRepository.getAllPosts(
+      userUuid,
+      page,
+      size,
+      blockedUsersUuid,
+    );
   }
 
   async getUserPosts(creatorUuid: string) {
