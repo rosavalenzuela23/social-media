@@ -1,4 +1,5 @@
 import "dotenv/config";
+import "reflect-metadata";
 import fastify from "fastify";
 import fastifyCookie from "@fastify/cookie";
 import fastifySession from "@fastify/session";
