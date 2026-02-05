@@ -1,9 +1,9 @@
-import User from "@users/domain/user.js";
+import Profile from "@users/domain/user.js";
 
-export default interface IUserRepository {
-    getAllUsers(): Promise<User[]>
-    createUser(username: string, password: string): Promise<void>
-    getUserByUsername(username: string): Promise<User | null>
-    updateUser(user: User): Promise<void>
-    addFriend(user: User, userFriend: User): Promise<void>
+export default interface IProfileRepository {
+  getAllUsers(): Promise<Profile[]>;
+  createUser(username: string, password: string): Promise<void>;
+  getUserByUsername(username: string): Promise<Profile | null>;
+  updateUser(user: Profile): Promise<void>;
+  addFriend(user: Profile, userFriend: Profile): Promise<void>;
 }

@@ -3,23 +3,13 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "moduleResolution": "node16",
-    "typeRoots": [
-      "./node_modules/@types",
-      "./src/types"
-    ],
+    "typeRoots": ["./node_modules/@types", "./src/types"],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@posts/*": [
-        "./src/posts/*"
-      ],
-      "@auth/*": [
-        "./src/auth/*"
-      ],
-      "@shared/*": [
-        "./src/shared/*"
-      ]
+      "@/*": ["./src/*"],
+      "@posts/*": ["./src/posts/*"],
+      "@auth/*": ["./src/auth/*"],
+      "@users/*": ["./src/users/*"],
+      "@shared/*": ["./src/shared/*"]
     },
     "module": "nodenext",
     "noEmitOnError": false,
@@ -36,15 +26,9 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "experimentalDecorators": true
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "eslint.config.ts",
-    "dist"
-  ],
-  "typescript.experimental.useTsgo": true,
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "eslint.config.ts", "dist"],
+  "typescript.experimental.useTsgo": true
 }

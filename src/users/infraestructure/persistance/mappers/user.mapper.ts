@@ -1,20 +1,29 @@
-import User from "@users/domain/user.js";
+import Profile from "@users/domain/user.js";
 import UserEntity from "@users/infraestructure/persistance/entities/user.entity.js";
 
 export default class UserMapper {
+  static toDomain(userEntity: UserEntity): Profile {
+    return new Profile(
+      userEntity.username,
+      userEntity.uuid,
+      userEntity.uuidFriendList.map((uuid) => new Profile("", uuid, [], [])),
+      userEntity.uuidBlockList.map((uuid) => new Profile("", uuid, [], [])),
+    );
+  }
 
-    static toDomain(userEntity: UserEntity): User {
-        return new User(userEntity.name, userEntity.username, userEntity.password, userEntity.uuid, userEntity.uuidFriendList);
-    }
+  static toEntity(user: Profile): UserEntity {
+    const userEntity = new UserEntity();
+    userEntity.username = user.username;
+    userEntity.uuid = user.uuid;
 
-    static toEntity(user: User): UserEntity {
-        const userEntity = new UserEntity();
-        userEntity.name = user.name;
-        userEntity.username = user.username;
-        userEntity.password = user.password;
-        userEntity.uuid = user.uuid;
-        userEntity.uuidFriendList = user.uuidFriendList;
-        return userEntity;
-    }
+    user.friendProfileList.forEach((f) => {
+      userEntity.uuidFriendList.push(f.uuid);
+    });
 
+    user.blockProfilesList.forEach((b) => {
+      userEntity.uuidBlockList.push(b.uuid);
+    });
+
+    return userEntity;
+  }
 }
