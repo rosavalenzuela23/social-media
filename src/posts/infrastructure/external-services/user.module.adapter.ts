@@ -1,5 +1,5 @@
 import type { IUserModulePort } from "@/posts/application/ports/users.module.port.js";
-import UserService from "@/users/application/user.service.js";
+import UserService from "@/profiles/application/user.service.js";
 
 class UserExternalService implements IUserModulePort {
   private userService: UserService;

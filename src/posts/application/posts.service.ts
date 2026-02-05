@@ -51,7 +51,15 @@ export default class PostService {
         images.push(image);
       }
 
-      const post = new Post(userUuid, username, message, new Date(), images);
+      const post = new Post(
+        userUuid,
+        username,
+        message,
+        new Date(),
+        [],
+        images,
+      );
+
       return await this.postRepository.createPost(post);
     } catch (error) {
       console.log(error);

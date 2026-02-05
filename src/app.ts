@@ -81,7 +81,6 @@ fastifyApp.register(fastifySession, {
   cookieName: "session",
   secret: process.env.FASTIFY_SESSION_SECRET,
   store: MongoStore.create({
-    dbName: "social-media",
     mongoUrl: process.env.MONGO_URL,
   }),
   cookie: {

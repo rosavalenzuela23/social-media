@@ -7,7 +7,7 @@ export default class Post {
     public message: string,
     public date: Date,
     public userUuidExcludeList: string[],
-    public images?: Image[],
+    public images: Image[] = [],
     public comments?: Post[],
   ) {}
 }

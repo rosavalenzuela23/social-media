@@ -8,7 +8,7 @@ import {
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 
-@Entity("users")
+@Entity("profiles")
 export default class UserEntity {
   @ObjectIdColumn()
   public id: ObjectId;
@@ -35,12 +35,12 @@ export default class UserEntity {
   @Column({
     type: "array",
   })
-  public uuidFriendList: string[];
+  public uuidFriendList: string[] = [];
 
   @Column({
     type: "array",
   })
-  public uuidBlockList: string[];
+  public uuidBlockList: string[] = [];
 
   @BeforeInsert()
   public beforeInsert() {
