@@ -6,8 +6,8 @@ import PostMapper from "@posts/infrastructure/persistance/mappers/post.mapper.js
 import type Image from "@/posts/domain/image.js";
 import ImageMapper from "../mappers/image.mapper.js";
 import { Not } from "typeorm";
-import { ArrayContains } from "typeorm/browser";
-import { In } from "typeorm/browser";
+import { ArrayContains } from "typeorm";
+import { In } from "typeorm";
 
 export default class MongoRepository implements IPostRepository {
   private dbContainer = datasource;
