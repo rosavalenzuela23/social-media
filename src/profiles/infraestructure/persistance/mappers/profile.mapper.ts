@@ -1,8 +1,8 @@
 import Profile from "@profiles/domain/user.js";
-import UserEntity from "@profiles/infraestructure/persistance/entities/user.entity.js";
+import ProfileEntity from "@/profiles/infraestructure/persistance/entities/profile.entity.js";
 
-export default class UserMapper {
-  static toDomain(userEntity: UserEntity): Profile {
+export default class ProfileMapper {
+  static toDomain(userEntity: ProfileEntity): Profile {
     return new Profile(
       userEntity.username,
       userEntity.uuid,
@@ -11,8 +11,8 @@ export default class UserMapper {
     );
   }
 
-  static toEntity(user: Profile): UserEntity {
-    const userEntity = new UserEntity();
+  static toEntity(user: Profile): ProfileEntity {
+    const userEntity = new ProfileEntity();
     userEntity.username = user.username;
     userEntity.uuid = user.uuid;
 

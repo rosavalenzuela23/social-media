@@ -1,10 +1,10 @@
-import js from "@eslint/js";
-import globals from "globals";
-import tseslint from "typescript-eslint";
+import js from '@eslint/js';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   // 1. Global ignores (optional but recommended)
-  { ignores: ["dist", "node_modules", "build"] },
+  { ignores: ['dist', 'node_modules', 'build'] },
 
   // 2. Base JS Recommended
   js.configs.recommended,
@@ -14,7 +14,7 @@ export default tseslint.config(
 
   // 4. Your custom overrides
   {
-    files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
+    files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -27,11 +27,14 @@ export default tseslint.config(
       },
     },
     rules: {
-      "semi": ["error", "always"],
+      semi: ['error', 'always'],
       // Example of a specific TS rule
-      "@typescript-eslint/no-explicit-any": "warn", 
+      '@typescript-eslint/no-explicit-any': 'error',
       // Example: TypeORM often requires decorators
-      "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_' },
+      ],
     },
-  },
+  }
 );

@@ -1,16 +1,16 @@
 import type { IUserModulePort } from "@/posts/application/ports/users.module.port.js";
-import UserService from "@/profiles/application/user.service.js";
+import ProfileService from "@/profiles/application/profile.service.js";
 
 class UserExternalService implements IUserModulePort {
-  private userService: UserService;
+  private userService: ProfileService;
 
   private static _instance: UserExternalService | null = null;
 
-  private constructor(userService: UserService) {
+  private constructor(userService: ProfileService) {
     this.userService = userService;
   }
 
-  static getInstance(userService: UserService): UserExternalService {
+  static getInstance(userService: ProfileService): UserExternalService {
     return (
       this._instance || (this._instance = new UserExternalService(userService))
     );

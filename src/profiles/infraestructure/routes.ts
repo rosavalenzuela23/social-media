@@ -1,15 +1,26 @@
-import type { FastifyInstance } from "fastify";
-import createUserSchema from "@profiles/infraestructure/schemas/create-user.schema.js";
+import type { FastifyInstance } from 'fastify';
 import {
-  getAllUsers,
-  createUser,
-} from "@profiles/infraestructure/handlers/user.handler.js";
-import { requireAuth } from "@shared/infrastructure/fastify/auth-hook.js";
+  getAllProfiles,
+  getOwnUserInformation,
+  createProfile,
+} from '@/profiles/infraestructure/handlers/profile.handler.js';
+import { requireAuth } from '@shared/infrastructure/fastify/auth-hook.js';
+import createProfileSchema from './schemas/create-profile.schema.js';
 
 async function routes(fastify: FastifyInstance) {
-  const defaultRoute = "/api/profiles";
-  fastify.get(defaultRoute + "/", { preHandler: [requireAuth] }, getAllUsers);
-  fastify.post(defaultRoute + "/", { schema: createUserSchema }, createUser);
+  const defaultRoute = '/api/profiles';
+  const adminRoute = '/api/admin/profiles';
+  fastify.post(
+    defaultRoute + '/me',
+    { schema: { body: createProfileSchema } },
+    createProfile
+  );
+  fastify.get(
+    defaultRoute + '/me',
+    { preHandler: [requireAuth] },
+    getOwnUserInformation
+  );
+  fastify.get(adminRoute + '/', { preHandler: [requireAuth] }, getAllProfiles);
 }
 
 export default routes;

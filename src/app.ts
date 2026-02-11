@@ -1,41 +1,32 @@
-import "dotenv/config";
-import "reflect-metadata";
-import fastify from "fastify";
-import fastifyCookie from "@fastify/cookie";
-import fastifySession from "@fastify/session";
-import fastifySwagger from "@fastify/swagger";
-import fastifyCors from "@fastify/cors";
-import fastifySwaggerUi from "@fastify/swagger-ui";
-import postRoutes from "@posts/infrastructure/routes.js";
-import userRoutes from "@auth/infraestructure/routes.js";
-import multipart from "@fastify/multipart";
-import fs from "fs";
-import { initDb } from "@shared/infrastructure/persistance/mongo-connection.js";
-import MongoStore from "connect-mongo";
+import userRoutes from '@auth/infraestructure/routes.js';
+import fastifyCookie from '@fastify/cookie';
+import fastifyCors from '@fastify/cors';
+import multipart from '@fastify/multipart';
+import fastifySession from '@fastify/session';
+import fastifySwagger from '@fastify/swagger';
+import fastifySwaggerUi from '@fastify/swagger-ui';
+import postRoutes from '@posts/infrastructure/routes.js';
+import { initDb as postgresInit } from '@profiles/infraestructure/persistance/postgres-connection.js';
+import profileRoutes from '@profiles/infraestructure/routes.js';
+import { initDb as mongoInit } from '@shared/infrastructure/persistance/mongo-connection.js';
+import MongoStore from 'connect-mongo';
+import 'dotenv/config';
+import fastify from 'fastify';
+import fs from 'fs';
+import 'reflect-metadata';
 
-const envToLogger = {
-  development: {
-    transport: {
-      target: "pino-pretty",
-      options: {
-        translateTime: "HH:MM:ss Z",
-        ignore: "pid,hostname",
-      },
-    },
-  },
-  production: process.env.ENVIRONMENT === "production",
-  test: false,
-};
+let httpsConfig;
 
-const loggerEnvironment =
-  process.env.ENVIRONMENT == "production" ? "production" : "development";
-
-const fastifyApp = fastify({
-  logger: envToLogger[loggerEnvironment],
-  https: {
+if (process.env.OVER_HTTPS === 'true') {
+  httpsConfig = {
     key: fs.readFileSync(process.env.SSL_KEY_PATH),
     cert: fs.readFileSync(process.env.SSL_CERT_PATH),
-  },
+  };
+}
+
+const fastifyApp = fastify({
+  logger: true,
+  https: httpsConfig,
 });
 
 fastifyApp.register(multipart, {
@@ -49,19 +40,19 @@ fastifyApp.register(multipart, {
 
 /* Middleware */
 
-if (process.env.ENVIRONMENT !== "production") {
+if (process.env.ENVIRONMENT !== 'production') {
   fastifyApp.register(fastifySwagger, {
     openapi: {
       info: {
-        title: "Social Media API",
-        description: "Fastify API documentation",
-        version: "A-0.0.1",
+        title: 'Social Media API',
+        description: 'Fastify API documentation',
+        version: 'A-0.0.1',
       },
     },
   });
 
   fastifyApp.register(fastifySwaggerUi, {
-    routePrefix: "/api/docs",
+    routePrefix: '/api/docs',
     uiConfig: {
       deepLinking: false,
     },
@@ -72,34 +63,39 @@ if (process.env.ENVIRONMENT !== "production") {
 
 fastifyApp.register(fastifyCors, {
   credentials: true,
-  origin: process.env.ALLOWED_ORIGINS.split(","),
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: process.env.ALLOWED_ORIGINS.split(','),
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 });
 
 fastifyApp.register(fastifyCookie);
 fastifyApp.register(fastifySession, {
-  cookieName: "session",
+  cookieName: 'session',
   secret: process.env.FASTIFY_SESSION_SECRET,
+  saveUninitialized: false,
+  rolling: false,
   store: MongoStore.create({
     mongoUrl: process.env.MONGO_URL,
   }),
   cookie: {
     secure: false,
     httpOnly: true,
-    path: "/",
-    sameSite: "lax",
+    path: '/',
+    sameSite: 'lax',
   },
 });
 
 /* Routes */
 fastifyApp.register(postRoutes);
 fastifyApp.register(userRoutes);
+fastifyApp.register(profileRoutes);
 
 (async () => {
   try {
-    fastifyApp.log.info("Connecting to DB");
-    await initDb();
-    fastifyApp.log.info("DB connected");
+    fastifyApp.log.info('Connecting to DB');
+    await mongoInit();
+    fastifyApp.log.info('Mongo connected');
+    await postgresInit();
+    fastifyApp.log.info('Postgres connected');
     fastifyApp.listen({
       port: parseInt(process.env.APP_PORT) || 3000,
     });

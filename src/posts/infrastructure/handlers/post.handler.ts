@@ -1,11 +1,11 @@
-import type { FastifyRequest, FastifyReply } from "fastify";
-import PostService from "@posts/application/posts.service.js";
-import type { IdUserParams } from "./types/types.js";
-import MongoRepository from "@posts/infrastructure/persistance/repositories/mongo.repository.js";
-import ProfileMongoRepository from "@/profiles/infraestructure/persistance/repositories/mongo.repository.js";
-import SharpManager from "@posts/infrastructure/utils/sharp.converter.js";
-import UserExternalService from "../external-services/user.module.adapter.js";
-import UserService from "@/profiles/application/user.service.js";
+import ProfileService from '@/profiles/application/profile.service.js';
+import ProfileMongoRepository from '@/profiles/infraestructure/persistance/repositories/postgres.repository.js';
+import PostService from '@posts/application/posts.service.js';
+import MongoRepository from '@posts/infrastructure/persistance/repositories/mongo.repository.js';
+import SharpManager from '@posts/infrastructure/utils/sharp.converter.js';
+import type { FastifyReply, FastifyRequest } from 'fastify';
+import UserExternalService from '../external-services/user.module.adapter.js';
+import type { IdUserParams } from './types/types.js';
 
 class PostController {
   private static _instance: PostController | null = null;
@@ -16,9 +16,9 @@ class PostController {
     this.postsService = new PostService(
       new MongoRepository(),
       UserExternalService.getInstance(
-        new UserService(new ProfileMongoRepository()),
+        new ProfileService(new ProfileMongoRepository())
       ),
-      new SharpManager(process.env.UPLOAD_FOLDER),
+      new SharpManager(process.env.UPLOAD_FOLDER)
     );
   }
 
@@ -28,11 +28,11 @@ class PostController {
 
   async getUserPosts(
     request: FastifyRequest<{ Params: IdUserParams }>,
-    reply: FastifyReply,
+    reply: FastifyReply
   ) {
     if (!request.session.user) {
       reply.status(401);
-      return { message: "Unauthorized" };
+      return { message: 'Unauthorized' };
     }
 
     return this.postsService.getUserPosts(request.params.uuid);
@@ -49,31 +49,31 @@ class PostController {
         page: number;
         size: number;
       };
-    }>,
+    }>
   ) {
     const page = request.query.page;
     const size = request.query.size;
     return await this.postsService.getAllPosts(
       page,
       size,
-      request.session.user.uuid,
+      request.session.user.uuid
     );
   }
 
   async getImageByuuid(
     request: FastifyRequest<{ Params: { uuid: string } }>,
-    reply: FastifyReply,
+    reply: FastifyReply
   ) {
     try {
       const stream = await this.postsService.getImageBufferById(
-        request.params.uuid,
+        request.params.uuid
       );
 
-      reply.type("image/webp");
+      reply.type('image/webp');
       return stream;
     } catch {
       reply.status(404);
-      return { message: "Image not found" };
+      return { message: 'Image not found' };
     }
   }
 
@@ -83,7 +83,7 @@ class PostController {
         content: { value: string };
         images?: any[] | any;
       };
-    }>,
+    }>
   ) {
     let images = request.body.images;
 
@@ -104,7 +104,7 @@ class PostController {
       request.session.user.uuid,
       request.session.user.username,
       request.body.content.value,
-      buffers,
+      buffers
     );
   }
 }
