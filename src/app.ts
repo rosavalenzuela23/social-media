@@ -13,12 +13,24 @@ import MongoStore from 'connect-mongo';
 import 'dotenv/config';
 import fastify from 'fastify';
 import fs from 'fs';
+import type { IncomingMessage, ServerResponse } from 'http';
+import type {
+  Http2ServerRequest,
+  Http2ServerResponse,
+  SecureServerOptions,
+} from 'http2';
 import 'reflect-metadata';
 
-let httpsConfig;
+let httpsConfig: SecureServerOptions<
+  typeof IncomingMessage,
+  typeof ServerResponse,
+  typeof Http2ServerRequest,
+  typeof Http2ServerResponse
+>;
 
 if (process.env.OVER_HTTPS === 'true') {
   httpsConfig = {
+    allowHTTP1: true,
     key: fs.readFileSync(process.env.SSL_KEY_PATH),
     cert: fs.readFileSync(process.env.SSL_CERT_PATH),
   };
@@ -77,10 +89,11 @@ fastifyApp.register(fastifySession, {
     mongoUrl: process.env.MONGO_URL,
   }),
   cookie: {
-    secure: false,
+    secure: true,
     httpOnly: true,
     path: '/',
-    sameSite: 'lax',
+    sameSite: 'none',
+    maxAge: 5300000,
   },
 });
 

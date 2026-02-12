@@ -13,7 +13,7 @@ const appDataSource = new DataSource({
   entities: [ProfileEntity],
   connectTimeoutMS: 500,
   synchronize: true,
-  logging: true,
+  logging: false,
 });
 
 const initDb = async () => {

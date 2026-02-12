@@ -6,8 +6,6 @@ import { DataSource } from 'typeorm';
 
 const dbPort = parseInt(process.env.DB_PORT || '27017');
 
-console.log(process.env.DB_USERNAME);
-
 const appDataSource = new DataSource({
   type: 'mongodb',
   host: process.env.DB_HOST || 'localhost',

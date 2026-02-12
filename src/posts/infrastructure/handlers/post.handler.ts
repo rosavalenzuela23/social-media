@@ -39,11 +39,11 @@ class PostController {
   }
 
   async getUserLoggedPosts(request: FastifyRequest) {
-    const userId = request.session.user.uuid;
+    const userId = request.session.user!.uuid;
     return await this.postsService.getUserPosts(userId);
   }
 
-  async getAllPosts(
+  async getFeed(
     request: FastifyRequest<{
       Querystring: {
         page: number;
@@ -53,10 +53,10 @@ class PostController {
   ) {
     const page = request.query.page;
     const size = request.query.size;
-    return await this.postsService.getAllPosts(
+    return await this.postsService.getFeed(
       page,
       size,
-      request.session.user.uuid
+      request.session.user!.uuid
     );
   }
 

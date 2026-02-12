@@ -1,4 +1,10 @@
-const createProfileSchema = {
+import type { JSONSchemaType } from 'ajv';
+
+interface ProfileBody {
+  name: string;
+}
+
+const createProfileSchema: JSONSchemaType<ProfileBody> = {
   type: 'object',
   required: ['name'],
   properties: {

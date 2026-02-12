@@ -5,6 +5,7 @@ export const requireAuth = async (
   reply: FastifyReply,
 ) => {
   if (!request?.session?.user) {
+    request.log.info("Unauthorized request with ip: " +  request.ip);
     return reply.status(401).send({ message: "Unauthorized" });
   }
 };

@@ -72,6 +72,9 @@ importers:
       '@typescript/native-preview':
         specifier: ^7.0.0-dev.20260102.1
         version: 7.0.0-dev.20260204.1
+      ajv:
+        specifier: ^8.17.1
+        version: 8.17.1
       dotenv:
         specifier: ^16.6.1
         version: 16.6.1
