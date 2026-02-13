@@ -1,13 +1,10 @@
-import type { IPostRepository } from "@posts/application/ports/post.repository.js";
-import { appDataSource as datasource } from "@shared/infrastructure/persistance/mongo-connection.js";
-import Post from "@posts/domain/post.js";
-import PostEntity from "@posts/infrastructure/persistance/entities/post.entity.js";
-import PostMapper from "@posts/infrastructure/persistance/mappers/post.mapper.js";
-import type Image from "@/posts/domain/image.js";
-import ImageMapper from "../mappers/image.mapper.js";
-import { Not } from "typeorm";
-import { ArrayContains } from "typeorm";
-import { In } from "typeorm";
+import type Image from '@/posts/domain/image.js';
+import type { IPostRepository } from '@posts/application/ports/post.repository.js';
+import Post from '@posts/domain/post.js';
+import PostEntity from '@posts/infrastructure/persistance/entities/post.entity.js';
+import PostMapper from '@posts/infrastructure/persistance/mappers/post.mapper.js';
+import { appDataSource as datasource } from '@shared/infrastructure/persistance/mongo-connection.js';
+import ImageMapper from '../mappers/image.mapper.js';
 
 export default class MongoRepository implements IPostRepository {
   private dbContainer = datasource;
@@ -16,14 +13,21 @@ export default class MongoRepository implements IPostRepository {
     userUuid: string,
     page: number,
     size: number,
-    userUuidExcludeList?: string[],
+    userUuidExcludeList?: string[]
   ): Promise<Post[]> {
     const posts = await this.dbContainer.getRepository(PostEntity).find({
       skip: page * size,
       take: size,
+      order: {
+        createdAt: "DESC"
+      },
       where: {
-        userUuidExcludeList: Not(ArrayContains([userUuid])),
-        creatorUuid: Not(In(userUuidExcludeList)),
+        userUuidExcludeList: {
+          $nin: [userUuid],
+        },
+        creatorUuid: {
+          $nin: userUuidExcludeList,
+        }
       },
     });
     return posts.map((post) => PostMapper.toDomain(post));
@@ -49,7 +53,9 @@ export default class MongoRepository implements IPostRepository {
       .getRepository(PostEntity)
       .findOneOrFail({
         where: {
-          "postImages.uuid": uuid,
+          postImages: {
+            uuid: uuid,
+          }
         },
         relations: {
           postImages: true,
@@ -64,7 +70,7 @@ export default class MongoRepository implements IPostRepository {
       });
 
     return ImageMapper.toDomain(
-      postEntity.postImages.find((image) => image.uuid === uuid),
+      postEntity.postImages.find((image) => image.uuid === uuid)
     );
   }
 }
