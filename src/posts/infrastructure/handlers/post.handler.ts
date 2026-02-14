@@ -71,8 +71,9 @@ class PostController {
 
       reply.type('image/webp');
       return stream;
-    } catch {
+    } catch (err) {
       reply.status(404);
+      request.log.error(err);
       return { message: 'Image not found' };
     }
   }
@@ -101,8 +102,8 @@ class PostController {
     }
 
     return await this.postsService.createPost(
-      request.session.user.uuid,
-      request.session.user.username,
+      request.session.user!.uuid,
+      request.session.user!.username,
       request.body.content.value,
       buffers
     );

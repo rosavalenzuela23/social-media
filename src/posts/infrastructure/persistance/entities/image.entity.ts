@@ -8,6 +8,6 @@ export default class ImageEntity {
   path: string;
 
   @Column({ type: 'varchar' })
-  @Index({ unique: true, sparse: true })
+  @Index('idx_image_uuid_unique', { unique: true, sparse: true })
   uuid: string;
 }

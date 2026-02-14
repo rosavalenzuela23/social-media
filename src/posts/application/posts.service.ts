@@ -1,6 +1,6 @@
 import type { FileManager } from '@posts/application/ports/file.manager.js';
 import type { IPostRepository } from '@posts/application/ports/post.repository.js';
-import Post from '@posts/domain/post.js';
+import { PostBuilder } from '@posts/domain/post.js';
 import { ReadStream } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import Image from '../domain/image.js';
@@ -10,7 +10,7 @@ export default class PostService {
   constructor(
     private postRepository: IPostRepository,
     private userModulePort: IUserModulePort,
-    private fileManager: FileManager
+    private fileManager: FileManager,
   ) {}
 
   async getFeed(page: number, size: number, userUuid: string) {
@@ -51,14 +51,13 @@ export default class PostService {
         images.push(image);
       }
 
-      const post = new Post(
-        userUuid,
-        username,
-        message,
-        new Date(),
-        [],
-        images
-      );
+      const post = new PostBuilder()
+        .setCreator(userUuid, username)
+        .setMessage(message)
+        .setDate(new Date())
+        .setExcludeList([])
+        .addImages(images)
+        .build();
 
       return await this.postRepository.createPost(post);
     } catch (error) {

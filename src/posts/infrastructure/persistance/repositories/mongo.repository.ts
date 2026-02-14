@@ -19,7 +19,7 @@ export default class MongoRepository implements IPostRepository {
       skip: page * size,
       take: size,
       order: {
-        createdAt: "DESC"
+        createdAt: 'DESC',
       },
       where: {
         userUuidExcludeList: {
@@ -27,7 +27,7 @@ export default class MongoRepository implements IPostRepository {
         },
         creatorUuid: {
           $nin: userUuidExcludeList,
-        }
+        },
       },
     });
     return posts.map((post) => PostMapper.toDomain(post));
@@ -53,9 +53,7 @@ export default class MongoRepository implements IPostRepository {
       .getRepository(PostEntity)
       .findOneOrFail({
         where: {
-          postImages: {
-            uuid: uuid,
-          }
+          'postImages.uuid': uuid,
         },
         relations: {
           postImages: true,
