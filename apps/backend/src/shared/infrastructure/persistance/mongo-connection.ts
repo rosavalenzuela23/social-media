@@ -4,11 +4,11 @@ import PostEntity from '@/posts/infrastructure/persistance/entities/post.entity.
 import ProfileEntity from '@/profiles/infraestructure/persistance/entities/profile.entity.js';
 import { DataSource } from 'typeorm';
 
-const dbPort = parseInt(process.env.DB_PORT || '27017');
+const dbPort = parseInt(process.env.MONGO_PORT || '27017');
 
 const appDataSource = new DataSource({
   type: 'mongodb',
-  host: process.env.DB_HOST || 'localhost',
+  host: process.env.MONGO_HOST || 'localhost',
   port: dbPort,
   database: 'social_media',
   entities: [ProfileEntity, UserEntity, PostEntity, ImageEntity],

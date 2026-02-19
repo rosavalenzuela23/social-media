@@ -1,8 +1,2 @@
-node_modules/
-coverage/
-test-pages/
-test/
-.env
-upload/
-dist/
-ssl/
+node_modules
+.turbo/

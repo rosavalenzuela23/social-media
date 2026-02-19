@@ -5,9 +5,9 @@ const dbPort = parseInt(process.env.PROFILE_DB_PORT || '5432');
 
 const appDataSource = new DataSource({
   type: 'postgres',
-  password: String(process.env.DB_PASSWORD),
-  username: String(process.env.DB_USERNAME),
-  host: process.env.DB_HOST || 'localhost',
+  password: String(process.env.PROFILE_DB_PASSWORD),
+  username: String(process.env.PROFILE_DB_USER),
+  host: process.env.PROFILE_DB_HOST || 'localhost',
   port: dbPort,
   database: 'social_media',
   entities: [ProfileEntity],

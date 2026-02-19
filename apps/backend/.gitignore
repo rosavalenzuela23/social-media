@@ -1,0 +1,8 @@
+node_modules/
+coverage/
+test-pages/
+test/
+.env
+upload/
+dist/
+ssl/
