@@ -5,7 +5,7 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "dev": "bun run --watch ./src/app.ts | pino-pretty",
+    "dev": "bun run --watch ./src/main.ts | pino-pretty",
     "build": "tsc; esbuild ./dist/app.js --minify --outdir ./dist-minify",
     "create:certs": "mkdir -p ssl && openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./ssl/test.key -out ./ssl/test.crt -subj /C=US/ST=State/L=City/O=Organization/OU=Department/CN=localhost",
     "test": "vitest"
