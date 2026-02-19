@@ -9,8 +9,8 @@ async function start() {
     await postgresInit()
     server.log.info("Connected to Postgresql")
     await server.listen({
-        port: 3000,
-        host: '127.0.0.1'
+        port: Number(process.env.APP_PORT) || 3000,
+        host: String(process.env.WEB_HOST) || "localhost"
     })
 }
 
