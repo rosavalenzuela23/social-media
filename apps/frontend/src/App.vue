@@ -12,31 +12,27 @@ const profileService = ProfileService.getInstance();
 const postService = PostService.getInstance();
 
 async function createPost(data: { message: string }) {
-  await postService.createPost(data.message);  
+  await postService.createPost(data.message);
 }
 
 onMounted(async () => {
-
   try {
     const myProfile = await profileService.getMyProfile();
 
     if (!myProfile) {
-      const name = prompt("What is your name?");
+      const name = prompt('What is your name?');
       if (!name) {
-        alert("Please enter a name")
+        alert('Please enter a name');
         window.location.reload();
         return;
       }
       await profileService.createProfile(name);
     }
-
   } catch {
-    router.push("/login")
+    router.push('/login');
     return;
   }
-
-})
-
+});
 </script>
 
 <template>
