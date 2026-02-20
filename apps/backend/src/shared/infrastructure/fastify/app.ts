@@ -19,12 +19,14 @@ import type {
 } from 'http2';
 import 'reflect-metadata';
 
-function getHttpsConfig(): SecureServerOptions<
-  typeof IncomingMessage,
-  typeof ServerResponse,
-  typeof Http2ServerRequest,
-  typeof Http2ServerResponse
-> | undefined {
+function getHttpsConfig():
+  | SecureServerOptions<
+      typeof IncomingMessage,
+      typeof ServerResponse,
+      typeof Http2ServerRequest,
+      typeof Http2ServerResponse
+    >
+  | undefined {
   if (process.env.OVER_HTTPS != 'true') return undefined;
 
   return {
@@ -57,7 +59,6 @@ function registerSwagger(app: FastifyInstance) {
 }
 
 function registerModules(app: FastifyInstance) {
-
   app.register(multipart, {
     attachFieldsToBody: true,
     limits: {
@@ -84,10 +85,10 @@ function registerModules(app: FastifyInstance) {
       mongoUrl: process.env.MONGO_URL,
     }),
     cookie: {
-      secure: true,
+      secure: process.env.OVER_HTTPS === 'true',
       httpOnly: true,
       path: '/',
-      sameSite: 'none',
+      sameSite: 'lax',
       maxAge: 5300000,
     },
   });
@@ -110,7 +111,4 @@ function createServer() {
   return fastifyApp;
 }
 
-export {
-  createServer
-}
-
+export { createServer };

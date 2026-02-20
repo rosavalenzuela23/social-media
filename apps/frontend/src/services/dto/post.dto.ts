@@ -1,9 +1,9 @@
 type Post = {
+  creatorUsername: string;
   creatorUuid: string;
   message: string;
   date: Date;
-  userUuidExcludeList: Array<string>;
-  images: Array<string>;
+  imagesPaths: Array<string>;
 };
 
 export type { Post };

@@ -1,5 +1,7 @@
 import axios from 'axios';
+import { injectable } from 'inversify';
 
+@injectable()
 export default class PostService {
   private static instance: PostService;
   private postsApi: string;
@@ -38,7 +40,7 @@ export default class PostService {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-        },
+        }
       );
       return res.data;
     } catch (err) {

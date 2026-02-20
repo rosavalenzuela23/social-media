@@ -16,6 +16,10 @@ async function createPost(data: { message: string }) {
 }
 
 onMounted(async () => {
+  if (window.location.href.includes('/login')) {
+    return;
+  }
+
   try {
     const myProfile = await profileService.getMyProfile();
 

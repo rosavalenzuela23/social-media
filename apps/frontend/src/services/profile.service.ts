@@ -1,5 +1,7 @@
 import axios from 'axios';
+import { injectable } from 'inversify';
 
+@injectable()
 export default class ProfileService {
   private static instance: ProfileService;
   private profilesApi: string;
@@ -35,7 +37,7 @@ export default class ProfileService {
         },
         {
           withCredentials: true,
-        },
+        }
       );
     } catch {
       console.log('');
