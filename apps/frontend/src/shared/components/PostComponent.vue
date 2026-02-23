@@ -1,7 +1,13 @@
 <script lang="ts" setup>
 import type { Post } from '@/services/dto/post.dto';
+import { Temporal } from 'temporal-polyfill';
 
 const props = defineProps<{ post: Post }>();
+
+const date = Temporal.Instant.from(props.post.date).toZonedDateTimeISO("UTC");
+
+const creationText = `${date.year}-${date.month}-${date.day}`;
+
 // <i class="bi bi-heart"></i>
 </script>
 
@@ -18,7 +24,9 @@ const props = defineProps<{ post: Post }>();
       </div>
     </div>
     <div class="row card-footer">
-      <div class="col-8"></div>
+      <div class="col-8">
+        {{ creationText }}
+      </div>
       <div class="col-4 d-flex justify-content-end">
         <button class="btn">
           <i class="bi bi-chat-square-text"></i>
