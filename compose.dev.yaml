@@ -1,0 +1,26 @@
+services:
+  backend_postgres:
+    image: postgres:18-alpine
+    container_name: backend_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: social_media
+    ports:
+      - "5432:5432"
+    volumes:
+      - backend_postgres_data:/var/lib/postgresql/18/data
+
+  backend_mongo:
+    image: mongo:latest
+    container_name: backend_mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - backend_mongo_data:/data/db
+
+volumes:
+  backend_postgres_data:
+  backend_mongo_data:
