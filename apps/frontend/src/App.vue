@@ -1,52 +1,14 @@
 <script setup async lang="ts">
-import { onMounted } from 'vue';
-import { RouterView, useRouter } from 'vue-router';
-import ProfileService from './services/profile.service';
-import NavBar from './shared/components/NavBar.vue';
-import PostCreator from './shared/components/PostCreator.vue';
-import PostService from './services/posts.service';
+import { onMounted } from "vue";
+import { RouterView } from "vue-router";
 
-const router = useRouter();
-
-const profileService = ProfileService.getInstance();
-const postService = PostService.getInstance();
-
-async function createPost(data: { message: string }) {
-  await postService.createPost(data.message);
-}
-
-onMounted(async () => {
-  if (window.location.href.includes('/login')) {
-    return;
-  }
-
-  try {
-    const myProfile = await profileService.getMyProfile();
-
-    if (!myProfile) {
-      const name = prompt('What is your name?');
-      if (!name) {
-        alert('Please enter a name');
-        window.location.reload();
-        return;
-      }
-      await profileService.createProfile(name);
-    }
-  } catch {
-    router.push('/login');
-    return;
-  }
-});
+onMounted(async () => {});
 </script>
 
 <template>
-  <PostCreator @create-post-event="createPost" />
-  <div class="container-fluid vh-100">
-    <NavBar></NavBar>
-    <Suspense>
-      <RouterView></RouterView>
-    </Suspense>
-  </div>
+  <Suspense>
+    <RouterView></RouterView>
+  </Suspense>
 </template>
 
 <style scoped></style>

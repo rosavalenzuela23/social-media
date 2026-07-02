@@ -7,7 +7,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "target": "es2024",
-    "lib": ["es2024", "Decorators.Legacy"],
+    "lib": ["es2024", "dom", "Decorators.Legacy"],
     "paths": {
       "@/*": ["./src/*"]
     }

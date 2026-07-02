@@ -6,11 +6,12 @@ const emit = defineEmits(["createPostEvent"]);
 
 const formId = useId();
 const modalId = useId();
-let modal: Modal;
 const message = ref();
 
 function toggleModal() {
-  modal.toggle();
+  const modal = document.getElementById(`${modalId}`) as HTMLDialogElement;
+  if (modal.open) modal.close();
+  else modal.showModal();
 }
 
 function createPostEvent(event: SubmitEvent) {
@@ -19,37 +20,37 @@ function createPostEvent(event: SubmitEvent) {
   alert("hello world!");
 }
 
-hotheys("ctrl+k", (event: KeyboardEvent) => {
-  event.preventDefault();
+hotheys("alt+k", (event: KeyboardEvent) => {
+  toggleModal();
 });
 
 onMounted(() => {});
 </script>
 
 <template>
-  <div class="modal fade" tabindex="-1" :id="modalId">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5>Say what whatever you're thinking!</h5>
-          <button class="btn-close" @click="toggleModal"></button>
-        </div>
-        <div class="modal-body">
-          <form @submit="createPostEvent" :id="formId">
-            <textarea
-              v-model="message"
-              require
-              :minlength="1"
-              class="form-control"
-              rows="10"
-            ></textarea>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" @click="toggleModal">Close</button>
-          <button :form="formId" type="submit" class="btn btn-primary">Create post</button>
-        </div>
-      </div>
+  <dialog class="modal" tabindex="-1" :id="modalId">
+    <div class="modal-box flex flex-col gap-3">
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      </form>
+      <h2 class="text-bold text-2xl">Create a new post!</h2>
+
+      <form @submit="createPostEvent" :id="formId" class="w-full flex flex-col gap-3">
+        <textarea
+          v-model="message"
+          require
+          :minlength="1"
+          class="textarea w-full"
+          rows="10"
+          placeholder="Say what whatever you're thinking!"
+        ></textarea>
+        <input type="file" class="file-input w-full" />
+      </form>
+
+      <button :form="formId" type="submit" class="btn btn-primary mt-6">
+        <i class="bi bi-chat-text-fill"></i>
+        Create post
+      </button>
     </div>
-  </div>
+  </dialog>
 </template>

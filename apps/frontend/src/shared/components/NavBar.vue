@@ -1,23 +1,24 @@
-
 <template>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">SocialCat 🐈</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-        </ul>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-      </div>
-    </div>
+  <nav class="navbar w-full bg-base-100 shadow-md fixed z-1">
+    <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
+      <!-- Sidebar toggle icon -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        stroke-linejoin="round"
+        stroke-linecap="round"
+        stroke-width="2"
+        fill="none"
+        stroke="currentColor"
+        class="my-1.5 inline-block size-4"
+      >
+        <path
+          d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"
+        ></path>
+        <path d="M9 4v16"></path>
+        <path d="M14 10l2 2l-2 2"></path>
+      </svg>
+    </label>
+    <h2 class="px-4 text-bold text-2xl">SocialCat 🐈</h2>
   </nav>
 </template>
