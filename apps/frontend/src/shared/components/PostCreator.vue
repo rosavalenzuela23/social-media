@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import hotheys from 'hotkeys-js';
-import { Modal } from 'bootstrap';
-import { onMounted, ref, useId } from 'vue';
+import hotheys from "hotkeys-js";
+import { onMounted, ref, useId } from "vue";
 
-const emit = defineEmits(['createPostEvent']);
+const emit = defineEmits(["createPostEvent"]);
 
 const formId = useId();
 const modalId = useId();
@@ -16,18 +15,15 @@ function toggleModal() {
 
 function createPostEvent(event: SubmitEvent) {
   event.preventDefault();
-  emit('createPostEvent', { message: message.value });
-  alert('hello world!');
+  emit("createPostEvent", { message: message.value });
+  alert("hello world!");
 }
 
-hotheys('ctrl+k', (event: KeyboardEvent) => {
+hotheys("ctrl+k", (event: KeyboardEvent) => {
   event.preventDefault();
-  toggleModal();
 });
 
-onMounted(() => {
-  modal = new Modal(document.querySelector(`#${modalId}`) as HTMLElement);
-});
+onMounted(() => {});
 </script>
 
 <template>
