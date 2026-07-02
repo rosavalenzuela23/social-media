@@ -1,14 +1,9 @@
-import axios from 'axios';
-import { injectable } from 'inversify';
+import axios from "axios";
+import { injectable } from "inversify";
 
 @injectable()
 export default class PostService {
   private static instance: PostService;
-  private postsApi: string;
-
-  private constructor() {
-    this.postsApi = import.meta.env.VITE_POSTS_API;
-  }
 
   static getInstance() {
     if (!this.instance) {
@@ -19,7 +14,7 @@ export default class PostService {
 
   async getPosts() {
     try {
-      const res = await axios.get(`${this.postsApi}/posts/feed?page=0&size=10`, {
+      const res = await axios.get(`/api/posts/feed?page=0&size=10`, {
         withCredentials: true,
       });
       return res.data;
@@ -31,16 +26,16 @@ export default class PostService {
   async createPost(content: string) {
     try {
       const res = await axios.post(
-        `${this.postsApi}/posts/`,
+        `/api/posts/`,
         {
           content,
         },
         {
           withCredentials: true,
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
       return res.data;
     } catch (err) {

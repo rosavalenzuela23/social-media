@@ -1,15 +1,10 @@
-import axios from 'axios';
-import type { UserRegisteredDto } from './dto/register.dto';
-import { injectable } from 'inversify';
+import axios from "axios";
+import type { UserRegisteredDto } from "./dto/register.dto";
+import { injectable } from "inversify";
 
 @injectable()
 export default class AuthService {
   private static instance: AuthService;
-  private authApi: string;
-
-  private constructor() {
-    this.authApi = import.meta.env.VITE_AUTH_API;
-  }
 
   static getInstance() {
     if (!this.instance) {
@@ -23,14 +18,14 @@ export default class AuthService {
   async login(username: string, password: string) {
     try {
       const res = await axios.post(
-        `${this.authApi}/users/login/`,
+        `/api/users/login/`,
         {
           username,
           password,
         },
         {
           withCredentials: true,
-        }
+        },
       );
 
       const message = res.data.message;
@@ -43,7 +38,7 @@ export default class AuthService {
   async register(opts: { email: string; password: string; username: string }) {
     try {
       const res = await axios.post<UserRegisteredDto>(
-        `${this.authApi}/users/`,
+        `/api/users/`,
         {
           username: opts.username,
           email: opts.email,
@@ -51,7 +46,7 @@ export default class AuthService {
         },
         {
           withCredentials: true,
-        }
+        },
       );
       const message = res.data.message;
       return message;

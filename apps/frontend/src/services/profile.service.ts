@@ -1,14 +1,9 @@
-import axios from 'axios';
-import { injectable } from 'inversify';
+import axios from "axios";
+import { injectable } from "inversify";
 
 @injectable()
 export default class ProfileService {
   private static instance: ProfileService;
-  private profilesApi: string;
-
-  private constructor() {
-    this.profilesApi = import.meta.env.VITE_PROFILES_API;
-  }
 
   static getInstance(): ProfileService {
     if (!this.instance) {
@@ -19,7 +14,7 @@ export default class ProfileService {
 
   async getMyProfile() {
     try {
-      const res = await axios.get(`${this.profilesApi}/profiles/me`, {
+      const res = await axios.get(`/api/profiles/me`, {
         withCredentials: true,
       });
       return res.data;
@@ -31,16 +26,16 @@ export default class ProfileService {
   async createProfile(profileName: string) {
     try {
       await axios.post(
-        `${this.profilesApi}/profiles/me`,
+        `/api/profiles/me`,
         {
           name: profileName,
         },
         {
           withCredentials: true,
-        }
+        },
       );
     } catch {
-      console.log('');
+      console.log("");
     }
   }
 }
