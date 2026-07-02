@@ -28,42 +28,7 @@ onMounted(async () => {
     <div class="flex flex-col items-center w-full">
       <div class="flex flex-col gap-5 min-w-xl max-w-2xl">
         <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-        <PostComponent :post="post" />
-
+        <PostComponent v-for="post in posts" :key="post.uuid" :post="post" />
       </div>
     </div>
   </MainLayout>
