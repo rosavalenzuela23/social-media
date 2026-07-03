@@ -23,7 +23,7 @@ const registerUser = async (event: SubmitEvent) => {
         <div class="card-title">
           <h2>Login to SocialCat 🐈</h2>
         </div>
-        <form @submit="registerUser($event)" class="flex flex-col gap-5 card" id="login-form">
+        <form @submit="registerUser($event)" class="flex flex-col gap-5" id="login-form">
           <input type="text" placeholder="Username" v-model="username" class="input" />
           <input type="password" placeholder="Password" v-model="password" class="input" />
         </form>
@@ -35,15 +35,3 @@ const registerUser = async (event: SubmitEvent) => {
     </div>
   </div>
 </template>
-
-<style scoped>
-input {
-  min-width: 20rem;
-  min-height: 2rem;
-}
-
-button {
-  min-width: 6rem;
-  min-height: 2rem;
-}
-</style>
