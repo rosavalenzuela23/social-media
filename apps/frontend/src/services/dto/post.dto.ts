@@ -1,9 +1,15 @@
+type Image = {
+  path: string;
+  uuid: string;
+};
+
 type Post = {
   creatorUsername: string;
+  uuid: string;
   creatorUuid: string;
   message: string;
   date: string;
-  imagesPaths: Array<string>;
+  images: Array<Image>;
 };
 
-export type { Post };
+export type { Post, Image };

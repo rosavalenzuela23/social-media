@@ -1,10 +1,7 @@
-import type { FastifyRequest, FastifyReply } from 'fastify';
-import {
-  UserAlreadyExistsException,
-  UserNotFoundException,
-} from '@auth/application/exceptions.js';
-import UserService from '@auth/application/user.service.js';
-import MongoRepository from '@auth/infraestructure/persistance/repositories/mongo.repository.js';
+import type { FastifyRequest, FastifyReply } from "fastify";
+import { UserAlreadyExistsException, UserNotFoundException } from "@auth/application/exceptions.js";
+import UserService from "@auth/application/user.service.js";
+import MongoRepository from "@auth/infraestructure/persistance/repositories/mongo.repository.js";
 
 class UserController {
   private static _instance: UserController;
@@ -25,19 +22,22 @@ class UserController {
     try {
       const user = await this.userService.login(body.username, body.password);
 
-      request.session.user = {
+      const sessionData = {
         username: user.username,
         uuid: user.uuid,
       };
 
+      request.session.user = sessionData;
+
       return {
-        message: 'Login successful',
+        message: "Login successful",
+        sessionData,
       };
     } catch (error) {
       if (error instanceof UserNotFoundException) {
         reply.status(400);
         return {
-          message: 'Usuario no encontrado',
+          message: "Usuario no encontrado",
         };
       }
 
@@ -47,17 +47,14 @@ class UserController {
 
   async logout(request: FastifyRequest) {
     request.session.destroy();
-    return { message: 'Session destroyed' };
+    return { message: "Session destroyed" };
   }
 
   async createUser(request: FastifyRequest, reply: FastifyReply) {
     const body = request.body as { username: string; password: string };
 
     try {
-      const message = await this.userService.createUser(
-        body.username,
-        body.password
-      );
+      const message = await this.userService.createUser(body.username, body.password);
       return {
         message,
       };

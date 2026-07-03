@@ -1,6 +1,25 @@
 <script setup lang="ts">
 import NavBar from "@/shared/components/NavBar.vue";
-import PostCreator from "@/shared/components/PostCreator.vue";
+import PostCreator from "@/shared/components/PostCreator/PostCreator.vue";
+
+import AuthService from "@/services/auth.service";
+import { useRouter } from "vue-router";
+import ProfileService from "@/services/profile.service";
+
+const authService = AuthService.getInstance();
+const profileService = ProfileService.getInstance();
+
+const profile = await profileService.getMyProfile();
+
+const router = useRouter();
+
+async function handleLogout() {
+  const message = await authService.logout();
+  if (message) {
+    // toast.success(message);
+    router.push("/auth/login");
+  }
+}
 </script>
 
 <template>
@@ -19,59 +38,46 @@ import PostCreator from "@/shared/components/PostCreator.vue";
       <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
 
       <div
-        class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64"
+        class="flex text-[18px] justify-between min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64"
       >
         <!-- Sidebar content here -->
         <ul class="menu w-full grow">
           <!-- List item -->
           <li>
-            <button
+            <RouterLink
+              to="/"
               class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
               data-tip="Homepage"
             >
               <!-- Home icon -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                stroke-linejoin="round"
-                stroke-linecap="round"
-                stroke-width="2"
-                fill="none"
-                stroke="currentColor"
-                class="my-1.5 inline-block size-4"
-              >
-                <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path>
-                <path
-                  d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-                ></path>
-              </svg>
+              <i class="bi bi-house-door"></i>
               <span class="is-drawer-close:hidden">Homepage</span>
-            </button>
+            </RouterLink>
           </li>
 
           <!-- List item -->
           <li>
-            <button
+            <RouterLink
+              :to="`/profile/me`"
               class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-              data-tip="Settings"
+              data-tip="Me"
             >
               <!-- Settings icon -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                stroke-linejoin="round"
-                stroke-linecap="round"
-                stroke-width="2"
-                fill="none"
-                stroke="currentColor"
-                class="my-1.5 inline-block size-4"
-              >
-                <path d="M20 7h-9"></path>
-                <path d="M14 17H5"></path>
-                <circle cx="17" cy="17" r="3"></circle>
-                <circle cx="7" cy="7" r="3"></circle>
-              </svg>
-              <span class="is-drawer-close:hidden">Settings</span>
+              <i class="bi bi-person-fill"></i>
+              <span class="is-drawer-close:hidden">Me</span>
+            </RouterLink>
+          </li>
+        </ul>
+
+        <ul class="menu w-full pb-4">
+          <li>
+            <button
+              class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+              data-tip="Log Out"
+              @click="handleLogout"
+            >
+              <i class="bi bi-box-arrow-left"></i
+              ><span class="is-drawer-close:hidden">Log Out</span>
             </button>
           </li>
         </ul>

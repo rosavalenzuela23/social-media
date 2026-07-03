@@ -1,9 +1,12 @@
+import type Profile from "@/models/profile";
 import axios from "axios";
 import { injectable } from "inversify";
 
 @injectable()
 export default class ProfileService {
   private static instance: ProfileService;
+
+  profile: Profile | null = null;
 
   static getInstance(): ProfileService {
     if (!this.instance) {
@@ -12,14 +15,17 @@ export default class ProfileService {
     return this.instance;
   }
 
-  async getMyProfile() {
+  async getMyProfile(update: boolean = false): Promise<Profile> {
+    if (this.profile && !update) return this.profile;
     try {
-      const res = await axios.get(`/api/profiles/me`, {
+      const res = await axios.get<Profile>(`/api/profiles/me`, {
         withCredentials: true,
       });
-      return res.data;
+      this.profile = res.data;
+      return this.profile;
     } catch (err) {
       console.log(err);
+      throw err;
     }
   }
 

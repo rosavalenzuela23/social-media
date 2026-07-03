@@ -1,12 +1,13 @@
 <script setup lang="ts">
+import PostService from "@/services/posts.service";
 import hotheys from "hotkeys-js";
-import { onMounted, ref, useId } from "vue";
-
-const emit = defineEmits(["createPostEvent"]);
+import { onMounted, onUnmounted, ref, useId } from "vue";
 
 const formId = useId();
 const modalId = useId();
 const message = ref();
+
+const postService = PostService.getInstance();
 
 function toggleModal() {
   const modal = document.getElementById(`${modalId}`) as HTMLDialogElement;
@@ -14,17 +15,27 @@ function toggleModal() {
   else modal.showModal();
 }
 
-function createPostEvent(event: SubmitEvent) {
+async function createPostEvent(event: SubmitEvent) {
   event.preventDefault();
-  emit("createPostEvent", { message: message.value });
-  alert("hello world!");
+  const formData = new FormData(event.target as HTMLFormElement);
+
+  let images = formData.get("images") as File | File[] | null | undefined;
+
+  if (images && (images?.name || !Array.isArray(images))) images = undefined;
+
+  await postService.createPost(message.value, images);
+  toggleModal();
+  message.value = "";
+
+  const messageCreatedEvent = new CustomEvent("post:created");
+  document.dispatchEvent(messageCreatedEvent);
 }
 
-hotheys("alt+k", (event: KeyboardEvent) => {
-  toggleModal();
-});
+hotheys("alt+k", () => toggleModal());
 
-onMounted(() => {});
+onUnmounted(() => {
+  hotheys.unbind("alt+k");
+});
 </script>
 
 <template>
@@ -44,7 +55,7 @@ onMounted(() => {});
           rows="10"
           placeholder="Say what whatever you're thinking!"
         ></textarea>
-        <input type="file" class="file-input w-full" />
+        <input type="file" name="images" class="file-input w-full" />
       </form>
 
       <button :form="formId" type="submit" class="btn btn-primary mt-6">

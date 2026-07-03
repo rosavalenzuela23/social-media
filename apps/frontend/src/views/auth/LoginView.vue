@@ -24,8 +24,8 @@ const registerUser = async (event: SubmitEvent) => {
           <h2>Login to SocialCat 🐈</h2>
         </div>
         <form @submit="registerUser($event)" class="flex flex-col gap-5" id="login-form">
-          <input type="text" placeholder="Username" v-model="username" class="input" />
-          <input type="password" placeholder="Password" v-model="password" class="input" />
+          <input type="text" placeholder="Username" v-model="username" class="w-full input" />
+          <input type="password" placeholder="Password" v-model="password" class="w-full input" />
         </form>
         <div class="card-actions flex flex-col gap-3 items-center">
           <button class="btn btn-primary w-full" form="login-form">Login</button>
