@@ -27,7 +27,9 @@ const toggleLike = async () => {
 	<div class="card bg-amber-50 text-black">
 		<div class="card-body overflow-x-hidden">
 			<div class="pt-3 card-title">
-				{{ props.post.creatorUsername }}
+				<RouterLink :to="`/profile/${props.post.creatorUuid}`" class="hover:underline">
+					{{ props.post.creatorUsername }}
+				</RouterLink>
 			</div>
 			{{ props.post.message }}
 

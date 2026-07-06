@@ -3,8 +3,10 @@ import ProfileEntity from "@/profiles/infraestructure/persistance/entities/profi
 import ProfileMapper from "@/profiles/infraestructure/persistance/mappers/profile.mapper.js";
 import { appDataSource as datasorce } from "@/profiles/infraestructure/persistance/postgres-connection.js";
 import Profile from "@profiles/domain/user.js";
+import { injectable } from "tsyringe";
 import { EntityManager, Repository } from "typeorm";
 
+@injectable()
 export default class PostgresRepository implements IProfileRepository {
 	private dbContainer = datasorce;
 	private profileRepository: Repository<ProfileEntity>;

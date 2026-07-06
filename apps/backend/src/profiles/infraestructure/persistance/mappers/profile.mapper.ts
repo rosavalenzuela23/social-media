@@ -11,6 +11,14 @@ export default class ProfileMapper {
 		);
 	}
 
+	static toDto(user: Profile) {
+		return {
+			username: user.username,
+			uuid: user.uuid,
+      friendProfileList: user.friendProfileList.map((profile) => ProfileMapper.toDto(profile)),
+		};
+	}
+
 	static toEntity(user: Profile): ProfileEntity {
 		const userEntity = new ProfileEntity();
 		userEntity.username = user.username;

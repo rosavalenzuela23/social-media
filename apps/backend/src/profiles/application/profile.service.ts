@@ -1,9 +1,11 @@
 import { UserNotFoundException } from "@profiles/application/exceptions.js";
 import type { IProfileRepository } from "@/profiles/application/ports/profile.repository.js";
 import type Profile from "../domain/user.js";
+import { inject, injectable } from "tsyringe";
 
+@injectable()
 export default class ProfileService {
-	constructor(private profileRepository: IProfileRepository) {}
+	constructor(@inject("ProfileRepository") private profileRepository: IProfileRepository) {}
 
 	async addFriend(username: string, usernameFriend: string) {
 		const user = await this.profileRepository.getUserByUsername(username);

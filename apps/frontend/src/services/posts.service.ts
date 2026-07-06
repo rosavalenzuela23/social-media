@@ -15,7 +15,7 @@ export default class PostService {
 
 	async getPostsByUuid(uuid: string) {
 		try {
-			const res = await axios.get(`/api/posts/user?uuid=${uuid}&page=0&size=10`, {
+			const res = await axios.get(`/api/posts/users/${uuid}?page=0&size=10`, {
 				withCredentials: true,
 			});
 			return res.data;

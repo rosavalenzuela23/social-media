@@ -4,44 +4,56 @@ import { injectable } from "inversify";
 
 @injectable()
 export default class ProfileService {
-  private static instance: ProfileService;
+	private static instance: ProfileService;
 
-  profile: Profile | null = null;
+	profile: Profile | null = null;
 
-  static getInstance(): ProfileService {
-    if (!this.instance) {
-      this.instance = new ProfileService();
-    }
-    return this.instance;
-  }
+	static getInstance(): ProfileService {
+		if (!this.instance) {
+			this.instance = new ProfileService();
+		}
+		return this.instance;
+	}
 
-  async getMyProfile(update: boolean = false): Promise<Profile> {
-    if (this.profile && !update) return this.profile;
-    try {
-      const res = await axios.get<Profile>(`/api/profiles/me`, {
-        withCredentials: true,
-      });
-      this.profile = res.data;
-      return this.profile;
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-  }
+	async getMyProfile(update: boolean = false): Promise<Profile> {
+		if (this.profile && !update) return this.profile;
+		try {
+			const res = await axios.get<Profile>(`/api/profiles/me`, {
+				withCredentials: true,
+			});
+			this.profile = res.data;
+			return this.profile;
+		} catch (err) {
+			console.log(err);
+			throw err;
+		}
+	}
 
-  async createProfile(profileName: string) {
-    try {
-      await axios.post(
-        `/api/profiles/me`,
-        {
-          name: profileName,
-        },
-        {
-          withCredentials: true,
-        },
-      );
-    } catch {
-      console.log("");
-    }
-  }
+	async createProfile(profileName: string) {
+		try {
+			await axios.post(
+				`/api/profiles/me`,
+				{
+					name: profileName,
+				},
+				{
+					withCredentials: true,
+				},
+			);
+		} catch {
+			console.log("");
+		}
+	}
+
+	async getProfile(profileUuid: string): Promise<Profile> {
+		try {
+			const res = await axios.get<Profile>(`/api/profiles/${profileUuid}`, {
+				withCredentials: true,
+			});
+			return res.data;
+		} catch (err) {
+			console.log(err);
+			throw err;
+		}
+	}
 }

@@ -1,6 +1,7 @@
 export default class Profile {
-  username!: string;
-  uuid!: string;
-  friendProfileList: Profile[] = [];
-  blockProfilesList: Profile[] = [];
+	profilePicture?: string;
+	username!: string;
+	uuid!: string;
+	friendProfileList: Profile[] = [];
+	blockProfilesList: Profile[] = [];
 }
