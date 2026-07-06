@@ -36,9 +36,9 @@ export default class PostService {
 		}
 	}
 
-	async getFeed() {
+	async getFeed(page: number = 0, limit: number = 10) {
 		try {
-			const res = await axios.get(`/api/posts/feed?page=0&size=10`, {
+			const res = await axios.get(`/api/posts/feed?page=${page}&size=${limit}`, {
 				withCredentials: true,
 			});
 			return res.data;
