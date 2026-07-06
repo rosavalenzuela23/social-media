@@ -31,7 +31,9 @@ async function createPostEvent(event: SubmitEvent) {
 	document.dispatchEvent(messageCreatedEvent);
 }
 
-hotheys("alt+k", () => toggleModal());
+onMounted(() => {
+	hotheys("alt+k", () => toggleModal());
+});
 
 onUnmounted(() => {
 	hotheys.unbind("alt+k");

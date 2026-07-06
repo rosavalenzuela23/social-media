@@ -19,6 +19,7 @@ const myIntersectableDiv = useTemplateRef("intersectableDiv");
 onMounted(async () => {
 	posts.push(...(await postsService.getFeed()));
 	observer.observe(myIntersectableDiv.value as HTMLDivElement);
+	pageState.page += 1;
 });
 
 watch(isIntersecting, async () => {

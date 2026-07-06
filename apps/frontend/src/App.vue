@@ -1,14 +1,11 @@
-<script setup async lang="ts">
-import { onMounted } from "vue";
+<script setup lang="ts">
 import { RouterView } from "vue-router";
-
-onMounted(async () => {});
 </script>
 
 <template>
-  <Suspense>
-    <RouterView></RouterView>
-  </Suspense>
+	<Suspense>
+		<RouterView></RouterView>
+	</Suspense>
 </template>
 
 <style scoped></style>
