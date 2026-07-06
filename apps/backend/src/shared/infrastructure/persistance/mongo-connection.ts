@@ -1,6 +1,7 @@
 import UserEntity from "@/auth/infraestructure/persistance/entities/user.entity.js";
 import CommentEntity from "@/posts/infrastructure/persistance/entities/comment.entity.js";
 import ImageEntity from "@/posts/infrastructure/persistance/entities/image.entity.js";
+import LikeEntity from "@/posts/infrastructure/persistance/entities/like.entity.js";
 import PostEntity from "@/posts/infrastructure/persistance/entities/post.entity.js";
 import ProfileEntity from "@/profiles/infraestructure/persistance/entities/profile.entity.js";
 import { DataSource } from "typeorm";
@@ -12,7 +13,7 @@ const appDataSource = new DataSource({
 	host: process.env.MONGO_HOST || "localhost",
 	port: dbPort,
 	database: "social_media",
-	entities: [ProfileEntity, UserEntity, PostEntity, ImageEntity, CommentEntity],
+	entities: [ProfileEntity, UserEntity, PostEntity, ImageEntity, CommentEntity, LikeEntity],
 	connectTimeoutMS: 1000,
 	synchronize: true,
 	logging: true,

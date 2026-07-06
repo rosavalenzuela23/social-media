@@ -7,22 +7,34 @@ export default class CommentEntity implements Comment {
 	@PrimaryGeneratedColumn()
 	_id: ObjectId;
 
-	@Column()
+	@Column({
+		type: "string",
+	})
 	creatorUsername: string;
 
-	@Column()
+	@Column({
+		type: "string",
+	})
 	creatorUuid: string;
 
-	@Column()
+	@Column({
+		type: "date",
+	})
 	date: Date;
 
-	@Column()
+	@Column({
+		type: "string",
+	})
 	message: string;
 
-	@Column()
+	@Column({
+		type: "string",
+	})
 	uuid: string;
 
-	@Column()
+	@Column({
+		type: "string",
+	})
 	postUuid: string;
 
 	@Column(() => LikeEntity)
