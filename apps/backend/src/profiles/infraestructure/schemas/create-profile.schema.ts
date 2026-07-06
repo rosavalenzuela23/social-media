@@ -1,21 +1,21 @@
-import type { JSONSchemaType } from 'ajv';
+import type { JSONSchemaType } from "ajv";
 
 interface ProfileBody {
-  name: string;
+	name: string;
 }
 
 const createProfileSchema: JSONSchemaType<ProfileBody> = {
-  type: 'object',
-  required: ['name'],
-  properties: {
-    name: {
-      type: 'string',
-      minLength: 2,
-      maxLength: 20,
-    },
-  },
-  additionalProperties: false,
-  nullable: false,
+	type: "object",
+	required: ["name"],
+	properties: {
+		name: {
+			type: "string",
+			minLength: 2,
+			maxLength: 20,
+		},
+	},
+	additionalProperties: false,
+	nullable: false,
 };
 
 export default createProfileSchema;

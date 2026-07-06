@@ -32,6 +32,7 @@ cp .env.example .env
 Open the newly created `.env` file and fill in the configuration options:
 
 #### General Application Settings
+
 - **`APP_PORT`**: The port number on which the Fastify backend server will listen (e.g., `3000`).
 - **`WEB_HOST`**: The hostname or IP address the server will bind to (e.g., `127.0.0.1` or `0.0.0.0`).
 - **`FASTIFY_SESSION_SECRET`**: A random, long, secure string used to sign session cookies.
@@ -41,20 +42,24 @@ Open the newly created `.env` file and fill in the configuration options:
 #### Database Settings
 
 ##### PostgreSQL (Used for profile information)
+
 - **`PROFILE_DB_PORT`**: Port of the PostgreSQL instance (defaults to `5432`).
 - **`PROFILE_DB_HOST`**: Host address of the PostgreSQL database (e.g., `localhost` or Docker service name).
 - **`PROFILE_DB_USER`**: Username to connect to PostgreSQL (e.g., `postgres`).
 - **`PROFILE_DB_PASSWORD`**: Password to connect to PostgreSQL.
 
 ##### MongoDB (Used for session storage, users, and post data)
+
 - **`MONGO_PORT`**: Port of the MongoDB instance (defaults to `27017`).
 - **`MONGO_HOST`**: Host address of the MongoDB database (e.g., `localhost` or Docker service name).
 - **`MONGO_URL`**: Full MongoDB connection URI, used by both TypeORM and the Fastify session store (e.g., `'mongodb://localhost:27017/social_media'`).
 
 #### File Uploads
+
 - **`UPLOAD_FOLDER`**: The absolute path to the directory where uploaded assets (e.g., post images) will be stored on your local disk.
 
 #### SSL / HTTPS Settings
+
 - **`OVER_HTTPS`**: Set to `true` to enable HTTPS, or `false` to use standard HTTP.
 - **`SSL_CERT_PATH`**: Relative or absolute path to the SSL certificate file (e.g., `./ssl/test.crt`).
 - **`SSL_KEY_PATH`**: Relative or absolute path to the SSL private key file (e.g., `./ssl/test.key`).
@@ -76,4 +81,3 @@ Once the certificates are in place, you can start the development server:
 ```bash
 pnpm dev
 ```
-

@@ -1,18 +1,18 @@
 const createUserSchema = {
-  type: "object",
-  required: ["username", "password"],
-  properties: {
-    username: {
-      type: "string",
-      minLength: 3,
-    },
-    password: {
-      type: "string",
-      minLength: 8,
-    },
-  },
-  additionalProperties: false,
-  nullable: false,
+	type: "object",
+	required: ["username", "password"],
+	properties: {
+		username: {
+			type: "string",
+			minLength: 3,
+		},
+		password: {
+			type: "string",
+			minLength: 8,
+		},
+	},
+	additionalProperties: false,
+	nullable: false,
 };
 
 export default { body: createUserSchema };
