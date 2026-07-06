@@ -31,12 +31,24 @@ async function createPostEvent(event: SubmitEvent) {
 	document.dispatchEvent(messageCreatedEvent);
 }
 
+function requestSubmit() {
+	const form = document.getElementById(formId) as HTMLFormElement;
+	form.requestSubmit();
+}
+
 onMounted(() => {
+	const modal = document.getElementById(`${modalId}`) as HTMLDialogElement;
+
 	hotheys("alt+k", () => toggleModal());
+	hotheys("ctrl+return", () => {
+		if (!modal.open) return;
+		requestSubmit();
+	});
 });
 
 onUnmounted(() => {
 	hotheys.unbind("alt+k");
+	hotheys.unbind("ctrl+enter");
 });
 </script>
 
@@ -51,11 +63,12 @@ onUnmounted(() => {
 			<form @submit="createPostEvent" :id="formId" class="w-full flex flex-col gap-3">
 				<textarea
 					v-model="message"
-					require
+					required
 					:minlength="1"
 					class="textarea w-full"
 					rows="10"
 					placeholder="Say what whatever you're thinking!"
+					@keydown.ctrl.enter="requestSubmit()"
 				></textarea>
 				<input type="file" name="images" class="file-input w-full" />
 			</form>

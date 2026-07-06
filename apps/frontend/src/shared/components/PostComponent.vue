@@ -51,7 +51,7 @@ const toggleLike = async () => {
 						<i class="bi bi-chat-dots"></i>
 					</button>
 					<button class="btn text-danger" @click="toggleLike">
-						Like
+						Meow
 						<i class="bi bi-heart-fill" v-if="isLiked"></i>
 						<i class="bi bi-heart" v-else></i>
 					</button>
