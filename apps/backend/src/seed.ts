@@ -11,6 +11,7 @@ import {
 import UserEntity from "./auth/infraestructure/persistance/entities/user.entity.js";
 import ProfileEntity from "./profiles/infraestructure/persistance/entities/profile.entity.js";
 import PostEntity from "./posts/infrastructure/persistance/entities/post.entity.js";
+import CommentEntity from "./posts/infrastructure/persistance/entities/comment.entity.js";
 import bcrypt from "bcrypt";
 
 async function seed() {
@@ -93,33 +94,73 @@ async function seed() {
 		const postsData = [
 			{
 				username: "johndoe",
-				message: "Excited to join this brand new social network! Hello world!",
+				message: "Just got a new Golden Retriever puppy today! He's so fluffy and keeps chewing on my shoes. 🐾🐶",
 				createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
+				comments: [
+					{
+						username: "janesmith",
+						message: "Oh my gosh, what's his name? Puppies are the absolute best!",
+					},
+					{
+						username: "bobb",
+						message: "Get ready for a lot of chew toys! Golden Retrievers have infinite energy.",
+					},
+				],
 			},
 			{
 				username: "janesmith",
-				message: "Had a beautiful hike in the mountains today. Nature is healing 🌲⛰️",
+				message: "Had a wonderful time volunteering at the cat shelter this morning. So many cute kittens waiting for a home! 🐱",
 				createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
+				comments: [
+					{
+						username: "alicej",
+						message: "I've been thinking about adopting a cat. Maybe I should visit!",
+					},
+				],
 			},
 			{
 				username: "alicej",
-				message: "Writing some clean code using TypeScript and TypeORM today. Love it!",
+				message: "Fascinating documentary about the migration patterns of monarch butterflies. Nature's navigation systems are incredible! 🦋",
 				createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
+				comments: [
+					{
+						username: "charlieg",
+						message: "I saw a few in my garden yesterday! Truly beautiful insects.",
+					},
+				],
 			},
 			{
 				username: "bobb",
-				message: "Anyone watching the match tonight? Let's discuss!",
+				message: "Did you know that sea otters hold hands when they sleep so they don't drift apart? Absolutely adorable! 🦦",
 				createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
+				comments: [
+					{
+						username: "johndoe",
+						message: "No way! That is the cutest animal fact I've ever heard.",
+					},
+				],
 			},
 			{
 				username: "charlieg",
-				message: "Thinking about what to cook for dinner. Maybe some pasta?",
+				message: "Saw a family of deer in my backyard this evening. They were so graceful and calm. 🦌",
 				createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000),
+				comments: [
+					{
+						username: "janesmith",
+						message: "You're so lucky! I only ever see squirrels in my yard.",
+					},
+				],
 			},
 			{
 				username: "johndoe",
-				message: "Just shared a cup of coffee with a friend. Good conversations are the best.",
+				message: "Watching the birds at my new garden feeder. A couple of blue jays and a cardinal just stopped by! 🐦",
 				createdAt: new Date(Date.now() - 30 * 60 * 1000),
+				comments: [
+					{
+						username: "alicej",
+						message: "Cardinals are so striking against the green trees. Love birdwatching!",
+					},
+				],
 			},
 		];
 
@@ -127,14 +168,33 @@ async function seed() {
 			const profile = profilesMap.get(p.username);
 			if (profile) {
 				const post = new PostEntity();
+				post.uuid = crypto.randomUUID();
 				post.creatorUuid = profile.uuid;
 				post.creatorUsername = profile.username;
 				post.message = p.message;
 				post.createdAt = p.createdAt;
 				post.userUuidExcludeList = [];
 				post.postImages = [];
+				post.comments = [];
+
+				if (p.comments) {
+					for (const c of p.comments) {
+						const commenterProfile = profilesMap.get(c.username);
+						if (commenterProfile) {
+							const comment = new CommentEntity();
+							comment.uuid = crypto.randomUUID();
+							comment.creatorUuid = commenterProfile.uuid;
+							comment.creatorUsername = commenterProfile.username;
+							comment.message = c.message;
+							comment.date = new Date(p.createdAt.getTime() + 10 * 60 * 1000);
+							comment.postUuid = post.uuid;
+							post.comments.push(comment);
+						}
+					}
+				}
+
 				await mongoDataSource.getRepository(PostEntity).save(post);
-				console.log(`Created post by ${p.username}: "${p.message.slice(0, 30)}..."`);
+				console.log(`Created post by ${p.username}: "${p.message.slice(0, 30)}..." with ${post.comments.length} comments`);
 			}
 		}
 

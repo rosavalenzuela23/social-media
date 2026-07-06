@@ -34,6 +34,8 @@ export default class PostEntity {
 
 	@BeforeInsert()
 	beforeInsert() {
-		this.uuid = crypto.randomUUID();
+		if (!this.uuid) {
+			this.uuid = crypto.randomUUID();
+		}
 	}
 }
