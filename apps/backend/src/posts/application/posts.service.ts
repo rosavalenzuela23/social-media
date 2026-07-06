@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import Image from "../domain/image.js";
 import type { IUserModulePort } from "./ports/users.module.port.js";
 import { CommentBuilder } from "../domain/comment.js";
+import Like from "../domain/like.js";
 
 export default class PostService {
 	constructor(
@@ -84,5 +85,32 @@ export default class PostService {
 	async getImageBufferById(uuid: string): Promise<ReadStream> {
 		const image = await this.postRepository.getImageByUuid(uuid);
 		return this.fileManager.getReadStreamFromFileName(image.uuid);
+	}
+
+	async setLike(postId: string, userId: string) {
+		const post = await this.postRepository.getPostById(postId);
+
+		if (!post.likes) {
+			post.likes = [];
+		}
+
+		//remove the like
+		for (const like of post.likes) {
+			if (like.userUuid === userId) {
+				post.likes = post.likes.filter((l) => l.userUuid !== userId);
+				await this.postRepository.updatePost(post);
+				return;
+			}
+		}
+
+		// add the like
+		const like = new Like();
+		like.userUuid = userId;
+		like.postId = postId;
+		like.username = "no-username";
+		like.createdAt = new Date();
+
+		post.likes.push(like);
+		await this.postRepository.updatePost(post);
 	}
 }

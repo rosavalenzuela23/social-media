@@ -1,3 +1,5 @@
+import type Like from "./like.js";
+
 export default class Comment {
 	constructor(
 		public uuid: string,
@@ -6,6 +8,7 @@ export default class Comment {
 		public creatorUuid: string,
 		public creatorUsername: string,
 		public postUuid: string,
+		public likes: Like[],
 	) {}
 }
 
@@ -16,6 +19,12 @@ export class CommentBuilder {
 	private creatorUuid?: string;
 	private creatorUsername?: string;
 	private postUuid?: string;
+	private likes: Like[] = [];
+
+	public setLikes(likes: Like[]) {
+		this.likes = likes;
+		return this;
+	}
 
 	public setUuid(uuid: string): CommentBuilder {
 		this.uuid = uuid;
@@ -57,6 +66,7 @@ export class CommentBuilder {
 			this.creatorUuid,
 			this.creatorUsername,
 			this.postUuid,
+			this.likes,
 		);
 	}
 }

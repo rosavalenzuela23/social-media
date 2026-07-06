@@ -2,6 +2,7 @@ import Post, { PostBuilder } from "@posts/domain/post.js";
 import PostEntity from "@posts/infrastructure/persistance/entities/post.entity.js";
 import ImageMapper from "./image.mapper.js";
 import CommentMapper from "./comment.mapper.js";
+import LikeMapper from "./like.mapper.js";
 
 export default class PostMapper {
 	static toEntity(post: Post): PostEntity {
@@ -15,6 +16,9 @@ export default class PostMapper {
 		if (post.comments) {
 			postEntity.comments = post.comments.map((comment) => CommentMapper.toEntity(comment));
 		}
+		if (post.likes) {
+			postEntity.likes = post.likes.map((like) => LikeMapper.toEntity(like));
+		}
 		return postEntity;
 	}
 
@@ -27,6 +31,7 @@ export default class PostMapper {
 			images: post.images?.map((image) => ImageMapper.toDto(image)),
 			uuid: post.uuid,
 			comments: post.comments?.map((comment) => CommentMapper.toDto(comment)) || [],
+			likes: post.likes?.map((like) => LikeMapper.toDto(like)) || [],
 		};
 	}
 
@@ -39,6 +44,7 @@ export default class PostMapper {
 			.addImages(postEntity.postImages?.map((image) => ImageMapper.toDomain(image)))
 			.setUuid(postEntity.uuid)
 			.setComments(postEntity.comments?.map((comment) => CommentMapper.toDomain(comment)))
+			.setLikes(postEntity.likes?.map((like) => LikeMapper.toDomain(like)))
 			.build();
 
 		console.log(postEntity.comments);

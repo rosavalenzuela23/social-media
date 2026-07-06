@@ -94,7 +94,8 @@ async function seed() {
 		const postsData = [
 			{
 				username: "johndoe",
-				message: "Just got a new Golden Retriever puppy today! He's so fluffy and keeps chewing on my shoes. 🐾🐶",
+				message:
+					"Just got a new Golden Retriever puppy today! He's so fluffy and keeps chewing on my shoes. 🐾🐶",
 				createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
 				comments: [
 					{
@@ -109,7 +110,8 @@ async function seed() {
 			},
 			{
 				username: "janesmith",
-				message: "Had a wonderful time volunteering at the cat shelter this morning. So many cute kittens waiting for a home! 🐱",
+				message:
+					"Had a wonderful time volunteering at the cat shelter this morning. So many cute kittens waiting for a home! 🐱",
 				createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
 				comments: [
 					{
@@ -120,7 +122,8 @@ async function seed() {
 			},
 			{
 				username: "alicej",
-				message: "Fascinating documentary about the migration patterns of monarch butterflies. Nature's navigation systems are incredible! 🦋",
+				message:
+					"Fascinating documentary about the migration patterns of monarch butterflies. Nature's navigation systems are incredible! 🦋",
 				createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
 				comments: [
 					{
@@ -131,7 +134,8 @@ async function seed() {
 			},
 			{
 				username: "bobb",
-				message: "Did you know that sea otters hold hands when they sleep so they don't drift apart? Absolutely adorable! 🦦",
+				message:
+					"Did you know that sea otters hold hands when they sleep so they don't drift apart? Absolutely adorable! 🦦",
 				createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
 				comments: [
 					{
@@ -142,7 +146,8 @@ async function seed() {
 			},
 			{
 				username: "charlieg",
-				message: "Saw a family of deer in my backyard this evening. They were so graceful and calm. 🦌",
+				message:
+					"Saw a family of deer in my backyard this evening. They were so graceful and calm. 🦌",
 				createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000),
 				comments: [
 					{
@@ -153,7 +158,8 @@ async function seed() {
 			},
 			{
 				username: "johndoe",
-				message: "Watching the birds at my new garden feeder. A couple of blue jays and a cardinal just stopped by! 🐦",
+				message:
+					"Watching the birds at my new garden feeder. A couple of blue jays and a cardinal just stopped by! 🐦",
 				createdAt: new Date(Date.now() - 30 * 60 * 1000),
 				comments: [
 					{
@@ -194,7 +200,9 @@ async function seed() {
 				}
 
 				await mongoDataSource.getRepository(PostEntity).save(post);
-				console.log(`Created post by ${p.username}: "${p.message.slice(0, 30)}..." with ${post.comments.length} comments`);
+				console.log(
+					`Created post by ${p.username}: "${p.message.slice(0, 30)}..." with ${post.comments.length} comments`,
+				);
 			}
 		}
 

@@ -1,5 +1,6 @@
 import type Comment from "./comment.js";
 import Image from "./image.js";
+import type Like from "./like.js";
 
 export default class Post {
 	constructor(
@@ -11,6 +12,7 @@ export default class Post {
 		public images: Image[] = [],
 		public comments?: Comment[],
 		public uuid?: string,
+		public likes?: Like[],
 	) {}
 }
 
@@ -23,6 +25,7 @@ export class PostBuilder {
 	private images: Image[] = [];
 	private comments: Comment[] = [];
 	private uuid?: string;
+	private likes: Like[] = [];
 
 	public setCreator(uuid: string, username: string): PostBuilder {
 		this.creatorUuid = uuid;
@@ -65,6 +68,11 @@ export class PostBuilder {
 		return this;
 	}
 
+	public setLikes(likes: Like[]) {
+		this.likes = likes;
+		return this;
+	}
+
 	public build(): Post {
 		if (!this.creatorUsername || !this.creatorUuid || !this.message) {
 			throw new Error("Required fields are missing: creatorUuid, creatorUsername, message");
@@ -79,6 +87,7 @@ export class PostBuilder {
 			this.images,
 			this.comments,
 			this.uuid,
+			this.likes,
 		);
 	}
 }

@@ -1,5 +1,6 @@
 import type Comment from "@/posts/domain/comment.js";
 import { BeforeInsert, Column, Entity, ObjectId, PrimaryGeneratedColumn } from "typeorm";
+import LikeEntity from "./like.entity.js";
 
 @Entity()
 export default class CommentEntity implements Comment {
@@ -23,6 +24,9 @@ export default class CommentEntity implements Comment {
 
 	@Column()
 	postUuid: string;
+
+	@Column(() => LikeEntity)
+	likes: LikeEntity[];
 
 	@BeforeInsert()
 	beforeInsert() {

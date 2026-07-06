@@ -91,6 +91,16 @@ class PostController {
 		return PostMapper.toDto(post);
 	}
 
+	async setLike(
+		request: FastifyRequest<{
+			Params: {
+				postId: string;
+			};
+		}>,
+	) {
+		await this.postsService.setLike(request.params.postId, request.session.user!.uuid);
+	}
+
 	async createPost(
 		request: FastifyRequest<{
 			Body: {

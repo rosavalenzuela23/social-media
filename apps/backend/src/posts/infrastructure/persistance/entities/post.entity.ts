@@ -1,6 +1,7 @@
 import { BeforeInsert, Column, Entity, Index, ObjectId, ObjectIdColumn, OneToMany } from "typeorm";
 import ImageEntity from "./image.entity.js";
 import CommentEntity from "./comment.entity.js";
+import LikeEntity from "./like.entity.js";
 
 @Entity("posts")
 export default class PostEntity {
@@ -31,6 +32,9 @@ export default class PostEntity {
 
 	@Column(() => CommentEntity)
 	comments: CommentEntity[];
+
+	@Column(() => LikeEntity)
+	likes: LikeEntity[];
 
 	@BeforeInsert()
 	beforeInsert() {

@@ -4,6 +4,7 @@ import { requireAuth } from "@shared/infrastructure/fastify/auth-hook.js";
 import type { FastifyInstance } from "fastify";
 import getPostsPageSchema from "./schemas/get-posts.schema.js";
 import addCommentSchema from "./schemas/add-comment.schema.js";
+import setLikeSchema from "./schemas/set-like.schema.js";
 
 const controller = PostController.instance;
 
@@ -17,6 +18,11 @@ async function routes(fastify: FastifyInstance) {
 		defaultRoute + "/feed",
 		{ schema: getPostsPageSchema },
 		controller.getFeed.bind(controller),
+	);
+	fastify.put(
+		defaultRoute + "/:postId/like",
+		{ schema: setLikeSchema },
+		controller.setLike.bind(controller),
 	);
 	fastify.post(
 		defaultRoute + "/comment",

@@ -1,5 +1,6 @@
 import Comment, { CommentBuilder } from "@posts/domain/comment.js";
 import CommentEntity from "../entities/comment.entity.js";
+import LikeMapper from "./like.mapper.js";
 
 export default class CommentMapper {
 	static toEntity(comment: Comment): CommentEntity {
@@ -10,6 +11,7 @@ export default class CommentMapper {
 		commentEntity.date = comment.date;
 		commentEntity.postUuid = comment.postUuid;
 		commentEntity.uuid = comment.uuid;
+		commentEntity.likes = comment.likes?.map((like) => LikeMapper.toEntity(like)) || [];
 		return commentEntity;
 	}
 
@@ -20,6 +22,7 @@ export default class CommentMapper {
 			.setDate(commentEntity.date)
 			.setUuid(commentEntity.uuid)
 			.setPostUuid(commentEntity.postUuid)
+			.setLikes(commentEntity.likes?.map((like) => LikeMapper.toDomain(like)) || [])
 			.build();
 		return comment;
 	}
@@ -32,6 +35,7 @@ export default class CommentMapper {
 			creatorUuid: comment.creatorUuid,
 			creatorUsername: comment.creatorUsername,
 			postUuid: comment.postUuid,
+			likes: comment.likes?.map((like) => LikeMapper.toDto(like)) || [],
 		};
 	}
 }
