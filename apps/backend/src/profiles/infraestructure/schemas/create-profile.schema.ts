@@ -1,10 +1,4 @@
-import type { JSONSchemaType } from "ajv";
-
-interface ProfileBody {
-	name: string;
-}
-
-const createProfileSchema: JSONSchemaType<ProfileBody> = {
+const createProfileSchema = {
 	type: "object",
 	required: ["name"],
 	properties: {

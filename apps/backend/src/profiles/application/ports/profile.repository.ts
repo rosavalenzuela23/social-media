@@ -9,4 +9,6 @@ interface IProfileRepository {
 	addFriend(user: Profile, userFriend: Profile): Promise<void>;
 }
 
-export type { IProfileRepository };
+const IProfileRepository = Symbol("ProfileRepository");
+
+export { IProfileRepository };

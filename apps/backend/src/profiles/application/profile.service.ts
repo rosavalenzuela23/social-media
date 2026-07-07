@@ -1,11 +1,15 @@
 import { UserNotFoundException } from "@profiles/application/exceptions.js";
-import type { IProfileRepository } from "@/profiles/application/ports/profile.repository.js";
+import { IProfileRepository } from "@/profiles/application/ports/profile.repository.js";
 import type Profile from "../domain/user.js";
 import { inject, injectable } from "tsyringe";
+import { IFileManager } from "./ports/file.manager.js";
 
 @injectable()
 export default class ProfileService {
-	constructor(@inject("ProfileRepository") private profileRepository: IProfileRepository) {}
+	constructor(
+		@inject(IProfileRepository) private profileRepository: IProfileRepository,
+		@inject(IFileManager) private fileManager: IFileManager,
+	) {}
 
 	async addFriend(username: string, usernameFriend: string) {
 		const user = await this.profileRepository.getUserByUsername(username);
@@ -62,6 +66,37 @@ export default class ProfileService {
 	async getProfileByUuid(uuid: string): Promise<Profile | null> {
 		const profile = await this.profileRepository.getUserByUuid(uuid);
 		return profile;
+	}
+
+	async getProfilePictureStream(id: string) {
+		const profile = await this.profileRepository.getUserByUuid(id);
+		if (!profile) {
+			throw new UserNotFoundException("User not found");
+		}
+
+		return this.fileManager.getReadStreamFromFileName(profile.profilePictureName);
+	}
+
+	async setProfilePicture(userId: string, image: Buffer) {
+		const profile = await this.profileRepository.getUserByUuid(userId);
+		if (!profile) {
+			throw new UserNotFoundException("User not found");
+		}
+
+		try {
+			await this.fileManager.saveImage(image, `${profile.uuid}/profile`, userId);
+		} catch (err) {
+			throw new Error(err?.message || "Failed to save image");
+		}
+
+		profile.profilePictureName = `${profile.uuid}/profile`;
+
+		try {
+			await this.profileRepository.updateUser(profile);
+		} catch (err) {
+			await this.fileManager.deleteFile(profile.profilePictureName);
+			throw new Error(err?.message || "Failed to update profile");
+		}
 	}
 
 	async createProfile(params: {

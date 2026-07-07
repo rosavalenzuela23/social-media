@@ -1,5 +1,5 @@
 export default class Profile {
-	profilePicture?: string;
+	profilePictureName?: string;
 	username!: string;
 	uuid!: string;
 	friendProfileList: Profile[] = [];

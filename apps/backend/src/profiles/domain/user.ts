@@ -4,6 +4,7 @@ export default class Profile {
 		public uuid: string,
 		public friendProfileList: Profile[],
 		public blockProfilesList: Profile[],
+		public profilePictureName?: string,
 	) {}
 
 	private itsMyProfile(profile: Profile): boolean {

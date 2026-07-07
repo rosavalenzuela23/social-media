@@ -42,11 +42,12 @@ export default class PostgresRepository implements IProfileRepository {
 	}
 
 	async updateUser(user: Profile): Promise<void> {
+		const userEntity = ProfileMapper.toEntity(user);
 		await this.profileRepository.update(
 			{
 				username: user.username,
 			},
-			user,
+			userEntity,
 		);
 	}
 

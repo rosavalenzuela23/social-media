@@ -8,6 +8,7 @@ export default class ProfileMapper {
 			userEntity.uuid,
 			userEntity.uuidFriendList.map((uuid) => new Profile("", uuid, [], [])),
 			userEntity.uuidBlockList.map((uuid) => new Profile("", uuid, [], [])),
+			userEntity.profilePictureName,
 		);
 	}
 
@@ -15,7 +16,8 @@ export default class ProfileMapper {
 		return {
 			username: user.username,
 			uuid: user.uuid,
-      friendProfileList: user.friendProfileList.map((profile) => ProfileMapper.toDto(profile)),
+			friendProfileList: user.friendProfileList.map((profile) => ProfileMapper.toDto(profile)),
+			profilePictureName: user.profilePictureName,
 		};
 	}
 
@@ -23,6 +25,7 @@ export default class ProfileMapper {
 		const userEntity = new ProfileEntity();
 		userEntity.username = user.username;
 		userEntity.uuid = user.uuid;
+		userEntity.profilePictureName = user.profilePictureName;
 
 		user.friendProfileList.forEach((f) => {
 			userEntity.uuidFriendList.push(f.uuid);

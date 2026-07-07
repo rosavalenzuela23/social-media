@@ -2,7 +2,7 @@ import ProfileService from "@/profiles/application/profile.service.js";
 import ProfileMongoRepository from "@/profiles/infraestructure/persistance/repositories/postgres.repository.js";
 import PostService from "@posts/application/posts.service.js";
 import MongoRepository from "@posts/infrastructure/persistance/repositories/mongo.repository.js";
-import SharpManager from "@posts/infrastructure/utils/sharp.converter.js";
+import SharpManager from "@shared/utils/sharp.converter.js";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import UserExternalService from "../external-services/user.module.adapter.js";
 import type { IdUserParams } from "./types/types.js";
@@ -17,7 +17,12 @@ class PostController {
 	private constructor() {
 		this.postsService = new PostService(
 			new MongoRepository(),
-			UserExternalService.getInstance(new ProfileService(new ProfileMongoRepository())),
+			UserExternalService.getInstance(
+				new ProfileService(
+					new ProfileMongoRepository(),
+					new SharpManager(process.env.PROFILE_PICTURES_FOLDER),
+				),
+			),
 			new SharpManager(process.env.UPLOAD_FOLDER),
 		);
 	}

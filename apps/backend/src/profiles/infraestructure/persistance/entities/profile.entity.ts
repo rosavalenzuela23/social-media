@@ -27,4 +27,10 @@ export default class ProfileEntity {
 		type: "json",
 	})
 	public uuidBlockList: string[] = [];
+
+	@Column({
+		type: "varchar",
+		nullable: true,
+	})
+	public profilePictureName?: string;
 }

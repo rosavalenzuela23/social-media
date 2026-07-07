@@ -1,13 +1,10 @@
 import type { FastifyInstance } from "fastify";
 import { requireAuth } from "@shared/infrastructure/fastify/auth-hook.js";
 import createProfileSchema from "./schemas/create-profile.schema.js";
-import { container } from "tsyringe";
-import PostgresRepository from "./persistance/repositories/postgres.repository.js";
+import { container } from "./di.js";
 import ProfileController from "./handlers/profile.handler.js";
-
-container.register("ProfileRepository", {
-	useValue: new PostgresRepository(),
-});
+import setProfilePictureSchema from "./schemas/set-profile-picture.schema.js";
+import { getProfilePictureSchema } from "./schemas/get-profile-picture.schema.js";
 
 const controller = container.resolve(ProfileController);
 
@@ -28,6 +25,18 @@ async function routes(fastify: FastifyInstance) {
 		defaultRoute + "/:profileId",
 		{ preHandler: [requireAuth] },
 		controller.getProfileWithId.bind(controller),
+	);
+	fastify.get(
+		defaultRoute + "/:profileId/picture",
+		{ schema: getProfilePictureSchema },
+		controller.getProfilePicture.bind(controller),
+	);
+	fastify.post(
+		defaultRoute + "/me/picture",
+		{
+			schema: setProfilePictureSchema,
+		},
+		controller.setProfileImage.bind(controller),
 	);
 	fastify.get(
 		adminRoute + "/",

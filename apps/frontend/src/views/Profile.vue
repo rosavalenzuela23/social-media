@@ -6,6 +6,8 @@ import type { Post } from "@/services/dto/post.dto";
 import PostService from "@/services/posts.service";
 import ProfileService from "@/services/profile.service";
 import PostComponent from "@/shared/components/PostComponent.vue";
+import ProfileSettings from "@/shared/components/ProfileSettings.vue";
+import ProtectedImage from "@/shared/components/ProtectedImage.vue";
 import { reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -20,6 +22,16 @@ const postService = PostService.getInstance();
 
 const posts = reactive<Post[]>([]);
 
+const openProfileSettings = () => {
+	const customEvent = new CustomEvent("openProfileSettings", {
+		bubbles: true,
+		detail: {
+			profileId,
+		},
+	});
+	document.dispatchEvent(customEvent);
+};
+
 let profile: Profile;
 if (profileId == "me") {
 	profile = await profileService.getMyProfile();
@@ -31,6 +43,7 @@ if (profileId == "me") {
 </script>
 
 <template>
+	<ProfileSettings v-if="profileId === 'me'" />
 	<MainLayout>
 		<div class="card bg-amber-100 max-lg:m v-else in-h-[150px] text-black mb-5">
 			<div class="card-body">
@@ -39,16 +52,20 @@ if (profileId == "me") {
 						<div
 							class="relative rounded-full w-24 bg-red-600 text-black flex justify-center items-center"
 						>
-							<img v-if="profile?.profilePicture" :src="profile.profilePicture" alt="" />
+							<ProtectedImage
+								v-if="profile?.profilePictureName"
+								:path="`/api/profiles/${profileId}/picture`"
+							/>
 							<p v-else class="text-3xl flex justify-center">
 								{{ profile.username.charAt(0).toUpperCase() }}
 							</p>
-							<div
+							<button
+								@click="openProfileSettings"
 								v-if="'me' === profileId"
 								class="absolute top-0 left-0 w-full group h-full hover:bg-black/20 hover:cursor-pointer flex justify-center items-center"
 							>
 								<i class="bi bi-eye hidden group-hover:block text-white text-2xl"></i>
-							</div>
+							</button>
 						</div>
 					</div>
 

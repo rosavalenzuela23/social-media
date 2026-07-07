@@ -45,6 +45,15 @@ export default class ProfileService {
 		}
 	}
 
+	async updateProfileInfo(formData: FormData) {
+		const data = new FormData();
+		data.set("image", formData.get("profile-picture")!);
+
+		await axios.post("/api/profiles/me/picture", data, {
+			withCredentials: true,
+		});
+	}
+
 	async getProfile(profileUuid: string): Promise<Profile> {
 		try {
 			const res = await axios.get<Profile>(`/api/profiles/${profileUuid}`, {
