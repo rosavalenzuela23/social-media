@@ -6,6 +6,7 @@ import getPostsPageSchema from "./schemas/get-posts.schema.js";
 import addCommentSchema from "./schemas/add-comment.schema.js";
 import setLikeSchema from "./schemas/set-like.schema.js";
 import likeCommentSchema from "./schemas/like-comment.schema.js";
+import getCommentsSchema from "./schemas/get-comments.schema.js";
 
 const controller = PostController.instance;
 
@@ -24,6 +25,11 @@ async function routes(fastify: FastifyInstance) {
 		defaultRoute + "/:postId/like",
 		{ schema: setLikeSchema },
 		controller.setLike.bind(controller),
+	);
+	fastify.get(
+		defaultRoute + "/:postId/comments",
+		{ schema: getCommentsSchema },
+		controller.getPostComments.bind(controller),
 	);
 	fastify.post(
 		defaultRoute + "/:postId/comments",

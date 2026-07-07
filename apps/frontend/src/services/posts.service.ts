@@ -1,6 +1,6 @@
 import axios from "axios";
 import { injectable } from "inversify";
-import type { Post } from "./dto/post.dto";
+import type { Comment, Post } from "./dto/post.dto";
 
 @injectable()
 export default class PostService {
@@ -61,6 +61,14 @@ export default class PostService {
 		await axios.post(`/api/posts/${postId}/comments/${commentId}/like`, undefined, {
 			withCredentials: true,
 		});
+	}
+
+	async getComments(postId: string) {
+		const res = await axios.get<Comment[]>(`/api/posts/${postId}/comments`, {
+			withCredentials: true,
+		});
+
+		return res.data;
 	}
 
 	async likePost(postId: string) {

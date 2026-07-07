@@ -22,11 +22,18 @@ const onCloseListener = () => {
 
 const post = reactive<Post>({});
 
+const getComments = async () => {
+	const comments = await postService.getComments(post.uuid);
+	post.comments = [...comments];
+};
+
 const addComent = async (e: SubmitEvent) => {
 	e.preventDefault();
 	const form = e.target as HTMLFormElement;
 	const formData = new FormData(form);
 	await postService.addComment(post.uuid, formData.get("comment") as string);
+	form.reset();
+	await getComments();
 };
 
 const likeComment = async ({

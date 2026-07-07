@@ -7,6 +7,7 @@ import type { FastifyReply, FastifyRequest } from "fastify";
 import UserExternalService from "../external-services/user.module.adapter.js";
 import type { IdUserParams } from "./types/types.js";
 import PostMapper from "../persistance/mappers/post.mapper.js";
+import CommentMapper from "../persistance/mappers/comment.mapper.js";
 
 class PostController {
 	private static _instance: PostController | null = null;
@@ -124,6 +125,17 @@ class PostController {
 
 		reply.code(201);
 		return { message: "Comment liked!" };
+	}
+
+	async getPostComments(
+		request: FastifyRequest<{
+			Params: {
+				postId: string;
+			};
+		}>,
+	) {
+		const comments = await this.postsService.getComments(request.params.postId);
+		return comments.map((c) => CommentMapper.toDto(c));
 	}
 
 	async createPost(

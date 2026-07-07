@@ -69,8 +69,8 @@ export default class PostService {
 
 		const comment = new CommentBuilder()
 			.setCreator(userId, username)
-      .setUuid(crypto.randomUUID())
-      .setMessage(content)
+			.setUuid(crypto.randomUUID())
+			.setMessage(content)
 			.setDate(new Date())
 			.setPostUuid(postId)
 			.build();
@@ -115,6 +115,11 @@ export default class PostService {
 		}
 
 		await this.postRepository.updatePost(post);
+	}
+
+	async getComments(postId: string) {
+		const post = await this.postRepository.getPostById(postId);
+		return post.comments;
 	}
 
 	async setLike(postId: string, userId: string) {
