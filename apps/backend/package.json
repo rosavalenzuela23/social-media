@@ -24,13 +24,13 @@
 		"connect-mongo": "^5.1.0",
 		"cookie-parser": "^1.4.7",
 		"crypto-js": "^4.2.0",
-		"fastify": "^5.7.4",
+		"fastify": "^5.8.5",
 		"mongodb": "^6.1.0",
 		"pg": "^8.18.0",
 		"reflect-metadata": "^0.2.2",
 		"sharp": "^0.34.5",
 		"tsyringe": "^4.10.0",
-		"typeorm": "^0.3.20",
+		"typeorm": "^1.0.0",
 		"uuid": "^13.0.0"
 	},
 	"devDependencies": {
