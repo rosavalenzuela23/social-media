@@ -60,7 +60,7 @@ export default class PostService {
 		}
 	}
 
-	async addCommentToPost(content: string, postId: string, userId: string) {
+	async addCommentToPost(content: string, postId: string, userId: string, username: string) {
 		const post = await this.postRepository.getPostById(postId);
 
 		if (!post.comments) {
@@ -68,8 +68,9 @@ export default class PostService {
 		}
 
 		const comment = new CommentBuilder()
-			.setCreator(userId, "no-username")
-			.setMessage(content)
+			.setCreator(userId, username)
+      .setUuid(crypto.randomUUID())
+      .setMessage(content)
 			.setDate(new Date())
 			.setPostUuid(postId)
 			.build();
@@ -85,6 +86,35 @@ export default class PostService {
 	async getImageBufferById(uuid: string): Promise<ReadStream> {
 		const image = await this.postRepository.getImageByUuid(uuid);
 		return this.fileManager.getReadStreamFromFileName(image.uuid);
+	}
+
+	async likeComment(postId: string, commentId: string, userId: string, username: string) {
+		const post = await this.postRepository.getPostById(postId);
+		const comment = post.comments?.find((comment) => comment.uuid === commentId);
+
+		if (!comment) {
+			throw new Error("Comment not found!");
+		}
+
+		if (!comment.likes) {
+			comment.likes = [];
+		}
+
+		const like = comment.likes.find((like) => like.userUuid === userId);
+
+		if (like) {
+			comment.likes = comment.likes.filter((like) => like.userUuid !== userId);
+		} else {
+			const like = new Like();
+			like.userUuid = userId;
+			like.postId = commentId;
+			like.postId = postId; // change to parentId
+			like.username = username;
+			like.createdAt = new Date();
+			comment.likes.push(like);
+		}
+
+		await this.postRepository.updatePost(post);
 	}
 
 	async setLike(postId: string, userId: string) {

@@ -71,17 +71,22 @@ class PostController {
 			Body: {
 				content: string;
 			};
-			Querystring: {
-				postUuid: string;
+			Params: {
+				postId: string;
 			};
 		}>,
 		reply: FastifyReply,
 	) {
 		const { content } = request.body;
-		const { postUuid } = request.query;
+		const { postId } = request.params;
 		const userUuid = request.session.user!.uuid;
 
-		await this.postsService.addCommentToPost(content, postUuid, userUuid);
+		await this.postsService.addCommentToPost(
+			content,
+			postId,
+			userUuid,
+			request.session.user!.username,
+		);
 
 		reply.code(201);
 	}
@@ -99,6 +104,26 @@ class PostController {
 		}>,
 	) {
 		await this.postsService.setLike(request.params.postId, request.session.user!.uuid);
+	}
+
+	async likeComment(
+		request: FastifyRequest<{
+			Params: {
+				postId: string;
+				commentId: string;
+			};
+		}>,
+		reply: FastifyReply,
+	) {
+		await this.postsService.likeComment(
+			request.params.postId,
+			request.params.commentId,
+			request.session.user!.uuid,
+			request.session.user!.username,
+		);
+
+		reply.code(201);
+		return { message: "Comment liked!" };
 	}
 
 	async createPost(

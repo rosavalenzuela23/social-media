@@ -10,6 +10,15 @@ type Like = {
 	createdAt: Date;
 };
 
+type Comment = {
+	uuid: string;
+	message: string;
+	creatorUuid: string;
+	creatorUsername: string;
+	postUuid: string;
+	likes: Like[];
+};
+
 type Post = {
 	creatorUsername: string;
 	uuid: string;
@@ -18,6 +27,7 @@ type Post = {
 	date: string;
 	images: Array<Image>;
 	likes: Like[];
+	comments?: Comment[];
 };
 
-export type { Post, Image, Like };
+export type { Post, Image, Like, Comment };

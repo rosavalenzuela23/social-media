@@ -1,10 +1,10 @@
 const addCommentSchema = {
-	querystring: {
+	params: {
 		type: "object",
 		properties: {
-			postUuid: { type: "string" },
+			postId: { type: "string" },
 		},
-		required: ["postUuid"],
+		required: ["postId"],
 	},
 	body: {
 		type: "object",

@@ -4,7 +4,7 @@ import { Temporal } from "temporal-polyfill";
 import ProtectedImage from "./ProtectedImage.vue";
 import PostService from "@/services/posts.service.ts";
 import ProfileService from "@/services/profile.service.ts";
-import { ref } from "vue";
+import { ref, toRaw } from "vue";
 
 const props = defineProps<{ post: Post }>();
 const date = Temporal.Instant.from(props.post.date).toZonedDateTimeISO("UTC");
@@ -20,6 +20,16 @@ const isLiked = ref(props.post.likes?.some((l) => l.userUuid === user.uuid));
 const toggleLike = async () => {
 	await postService.likePost(props.post.uuid);
 	isLiked.value = !isLiked.value;
+};
+
+const emitEvent = () => {
+	const openPostEvent = new CustomEvent("post:opened", {
+		detail: {
+			post: toRaw(props.post),
+		},
+	});
+
+	document.dispatchEvent(openPostEvent);
 };
 </script>
 
@@ -46,7 +56,7 @@ const toggleLike = async () => {
 				</div>
 
 				<div class="flex gap-3 text-white">
-					<button class="btn">
+					<button class="btn" @click="emitEvent">
 						Comment
 						<i class="bi bi-chat-dots"></i>
 					</button>

@@ -20,7 +20,7 @@
 			</svg>
 		</label>
 		<div class="flex w-full justify-between">
-			<h2 class="px-4 text-bold text-2xl">FaceCat 🐈</h2>
+			<h2 class="px-4 font-bold text-2xl">Facecat 🐈</h2>
 			<label class="input input-bordered mr-15">
 				<i class="bi bi-search"></i>
 				<input type="text" placeholder="Looking for something?" />

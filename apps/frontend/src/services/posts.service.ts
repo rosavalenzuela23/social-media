@@ -47,6 +47,22 @@ export default class PostService {
 		}
 	}
 
+	async addComment(postId: string, message: string) {
+		await axios.post(
+			`/api/posts/${postId}/comments`,
+			{ content: message },
+			{
+				withCredentials: true,
+			},
+		);
+	}
+
+	async likeComment(postId: string, commentId: string) {
+		await axios.post(`/api/posts/${postId}/comments/${commentId}/like`, undefined, {
+			withCredentials: true,
+		});
+	}
+
 	async likePost(postId: string) {
 		const res = await axios.put(`/api/posts/${postId}/like`, undefined, {
 			withCredentials: true,

@@ -5,6 +5,7 @@ import PostCreator from "@/shared/components/PostCreator/PostCreator.vue";
 import AuthService from "@/services/auth.service";
 import { useRouter } from "vue-router";
 import ProfileService from "@/services/profile.service";
+import PostDrawer from "@/shared/components/PostDrawer.vue";
 
 const authService = AuthService.getInstance();
 
@@ -27,6 +28,7 @@ async function handleLogout() {
 			<NavBar></NavBar>
 			<div class="p-5 mt-15">
 				<PostCreator />
+				<PostDrawer />
 				<slot></slot>
 			</div>
 		</div>
