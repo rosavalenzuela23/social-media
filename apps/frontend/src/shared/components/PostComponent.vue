@@ -4,7 +4,7 @@ import { Temporal } from "temporal-polyfill";
 import PostService from "@/services/posts.service.ts";
 import ProfileService from "@/services/profile.service.ts";
 import { ref, toRaw } from "vue";
-import PostBentoLayout from "./PostBentoLayout.vue";
+import ImageCarousel from "./ImageCarousel.vue";
 
 const props = defineProps<{ post: Post; likeButtonText?: string }>();
 const date = Temporal.Instant.from(props.post.date).toZonedDateTimeISO("UTC");
@@ -22,7 +22,7 @@ const toggleLike = async () => {
 	isLiked.value = !isLiked.value;
 };
 
-function strictCapitalize(str) {
+function strictCapitalize(str: string) {
 	if (!str) return "";
 	return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
@@ -49,10 +49,10 @@ const emitEvent = () => {
 			{{ props.post.message }}
 
 			<figure
-				class="bg-red-400 min-h-[450px] max-h-[450px]"
+				class="min-h-[450px] max-h-[450px] overflow-hidden"
 				v-if="props.post.images && props.post.images.length > 0"
 			>
-				<PostBentoLayout :images="props.post.images"></PostBentoLayout>
+				<ImageCarousel :images="props.post.images"></ImageCarousel>
 			</figure>
 
 			<div class="card-actions flex justify-between p-5">
