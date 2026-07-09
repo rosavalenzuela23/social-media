@@ -196,9 +196,15 @@ def single_test(path):
 
     with torch.no_grad():
         outputs = model(image)
+        print("===========")
+        print(outputs)
+        print("===========")
         pred_idx = outputs.argmax(dim=1).item()
-
-    pred_label = idx_to_label[pred_idx]
+        print(pred_idx)
+    if outputs[0][pred_idx] > 0:
+        pred_label = idx_to_label[pred_idx]
+    else:
+        pred_label = "other"
 
     print("\n=== Single Image Prediction ===")
     print(f"Image: {image_path}")

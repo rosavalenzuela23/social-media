@@ -12,4 +12,5 @@ const getRedisStore = function (): RedisStore {
 	return redisStore;
 };
 
+
 export { getRedisStore, redisClient };

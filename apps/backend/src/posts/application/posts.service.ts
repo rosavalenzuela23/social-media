@@ -7,6 +7,7 @@ import Image from "../domain/image.js";
 import type { IUserModulePort } from "./ports/users.module.port.js";
 import { CommentBuilder } from "../domain/comment.js";
 import Like from "../domain/like.js";
+import { RabbitMQService } from "@/shared/infrastructure/rabbit/rabbitmq-queues.js";
 
 export default class PostService {
 	constructor(
@@ -42,6 +43,7 @@ export default class PostService {
 				images.push(image);
 			}
 
+
 			const post = new PostBuilder()
 				.setCreator(userUuid, username)
 				.setMessage(message)
@@ -49,6 +51,17 @@ export default class PostService {
 				.setExcludeList([])
 				.addImages(images)
 				.build();
+
+      //ask categories
+      const rabbitService = RabbitMQService.getInstance(process.env.RABBITMQ_URL);
+
+      // Consuming
+      const publisher = rabbitService.createPublisher('cnn-queue')
+      await publisher.send(
+        { exchange: 'cnn-exchange', routingKey: 'cnn-queue' },
+        { message: images}
+      );
+      await publisher.close();
 
 			return await this.postRepository.createPost(post);
 		} catch (error) {

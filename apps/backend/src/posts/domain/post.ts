@@ -13,7 +13,15 @@ export default class Post {
 		public comments?: Comment[],
 		public uuid?: string,
 		public likes?: Like[],
+    public categories?: Category[]
 	) {}
+}
+
+enum Category {
+Cat,
+Dog,
+Snake,
+Other
 }
 
 export class PostBuilder {
@@ -26,6 +34,7 @@ export class PostBuilder {
 	private comments: Comment[] = [];
 	private uuid?: string;
 	private likes: Like[] = [];
+  private categories: Category[];
 
 	public setCreator(uuid: string, username: string): PostBuilder {
 		this.creatorUuid = uuid;
@@ -70,6 +79,11 @@ export class PostBuilder {
 
 	public setLikes(likes: Like[]) {
 		this.likes = likes;
+		return this;
+	}
+
+  	public addCategory(category: Category) {
+		this.categories.push(category)
 		return this;
 	}
 
