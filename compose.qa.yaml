@@ -1,0 +1,71 @@
+services:
+  api:
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    container_name: api
+    ports:
+      - "3000:3000"
+    env_file: ./apps/backend/.env
+    # .env targets local dev, where the datastores are on localhost. Inside the
+    # compose network localhost is the api container itself, so override the hosts.
+    environment:
+      WEB_HOST: 0.0.0.0
+      PROFILE_DB_HOST: backend_postgres
+      MONGO_HOST: backend_mongo
+      MONGO_URL: mongodb://backend_mongo:27017/social_media
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      backend_postgres:
+        condition: service_healthy
+      backend_mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  backend_postgres:
+    image: postgres:18-alpine
+    container_name: backend_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: social_media
+    ports:
+      - "5432:5432"
+    # postgres:18 sets PGDATA=/var/lib/postgresql/18/docker and declares the
+    # volume one level up, so the mount has to be /var/lib/postgresql.
+    volumes:
+      - backend_postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d social_media"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend_mongo:
+    image: mongo:latest
+    container_name: backend_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - backend_mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:latest
+    container_name: backend_redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  backend_postgres_data:
+  backend_mongo_data:
