@@ -1,25 +1,60 @@
-import pika, sys, os
-from .recognition.utils.eval import single_test
+import pika, sys, os, json
+from recognition.utils.eval import single_test
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 def main():
     credentials = pika.PlainCredentials('user', 'password')
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost', port=5672,credentials=credentials))
+    connection = pika.BlockingConnection(
+        pika.ConnectionParameters(host='localhost', port=5672, credentials=credentials)
+    )
     channel = connection.channel()
 
-    channel.queue_declare(queue='cnn-queue', durable=True, arguments={'x-queue-type': 'quorum'})
+    # 1. Declare the exchange (ensures it exists if Python starts first)
+    channel.exchange_declare(exchange='cnn-exchange', exchange_type='topic')
 
-    def callback(ch, method, properties, body):        
+    # 2. Declare your Quorum queue
+    channel.queue_declare(
+        queue='cnn-queue', 
+        durable=True, 
+        arguments={'x-queue-type': 'quorum'}
+    )
 
-        print(f" [x] Received {body}")
+    # 3. FIX: Bind the queue to the exchange using the routing key sent by TS
+    channel.queue_bind(
+        exchange='cnn-exchange', 
+        queue='cnn-queue', 
+        routing_key='cnn-queue'
+    )
 
-        for item in body:
-            print(single_test(item.path))
+    def callback(ch, method, properties, body):                
+        try:
+            # 4. FIX: Decode the raw binary bytes and parse them as JSON
+            data = json.loads(body.decode('utf-8'))
             
+            # Since TS sent: { message: images }, extract the 'message' property
+            images = data.get('message', [])
+            
+            # 5. FIX: Loop through the parsed array of dictionaries
+            for item in images:
+                # Use standard dictionary lookups instead of dot notation
+                image_path = os.getenv('UPLOAD_FOLDER')+item.get('path') 
+                
+                if image_path:
+                    result = single_test(image_path)
+                    print(result['predicted_label_name'])
+                else:
+                    print("Warning: Received an item missing a 'path' property.")
+                    
+        except Exception as e:
+            print(f"Error parsing or processing message payload: {e}", file=sys.stderr)
 
-    channel.basic_consume(queue='hello', on_message_callback=callback, auto_ack=True)
+    channel.basic_consume(queue='cnn-queue', on_message_callback=callback, auto_ack=True)
 
     print(' [*] Waiting for messages. To exit press CTRL+C')
     channel.start_consuming()
-
 
 if __name__ == '__main__':
     try:

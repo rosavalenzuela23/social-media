@@ -56,7 +56,7 @@ export default class PostService {
       const rabbitService = RabbitMQService.getInstance(process.env.RABBITMQ_URL);
 
       // Consuming
-      const publisher = rabbitService.createPublisher('cnn-queue')
+      const publisher = rabbitService.createPublisher('cnn-exchange')
       await publisher.send(
         { exchange: 'cnn-exchange', routingKey: 'cnn-queue' },
         { message: images}

@@ -1,0 +1,6 @@
+{
+    "scripts":{
+        "dev": "../../.venv/bin/python main.py"
+    }, 
+    "name": "python"
+}

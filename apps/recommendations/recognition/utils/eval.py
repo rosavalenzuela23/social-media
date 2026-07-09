@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import sys
+from io import BytesIO
 
 import torch
 from dotenv import load_dotenv
@@ -191,24 +192,21 @@ def single_test(path):
     model, device = load_or_train_model(model_type=model_type, path=model_path)
     model.eval()
 
-    image = Image.open(image_path).convert("RGB")
+    original_image = Image.open(image_path).convert("RGB")
+    png_buffer = BytesIO()
+    original_image.save(png_buffer, format="PNG")
+    png_buffer.seek(0)
+    image = Image.open(png_buffer).convert("RGB")
     image = RESNET_EVAL_TRANSFORM(image).unsqueeze(0).to(device)
 
     with torch.no_grad():
         outputs = model(image)
-        print("===========")
-        print(outputs)
-        print("===========")
         pred_idx = outputs.argmax(dim=1).item()
-        print(pred_idx)
     if outputs[0][pred_idx] > 0:
         pred_label = idx_to_label[pred_idx]
     else:
         pred_label = "other"
 
-    print("\n=== Single Image Prediction ===")
-    print(f"Image: {image_path}")
-    print(f"Predicted class: {pred_label} ({pred_idx})")
     return {
         "image_path": str(image_path),
         "predicted_label_id": pred_idx,
@@ -218,6 +216,6 @@ def single_test(path):
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        single_test(sys.argv[1])
+        print(single_test(sys.argv[1]))
     else:
         main()
