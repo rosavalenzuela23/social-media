@@ -6,7 +6,7 @@ import PostService from "@/services/posts.service.ts";
 import ProfileService from "@/services/profile.service.ts";
 import { ref, toRaw } from "vue";
 
-const props = defineProps<{ post: Post }>();
+const props = defineProps<{ post: Post; likeButtonText?: string }>();
 const date = Temporal.Instant.from(props.post.date).toZonedDateTimeISO("UTC");
 const creationText = `${date.year}-${date.month}-${date.day}`;
 
@@ -21,6 +21,11 @@ const toggleLike = async () => {
 	await postService.likePost(props.post.uuid);
 	isLiked.value = !isLiked.value;
 };
+
+function strictCapitalize(str) {
+	if (!str) return "";
+	return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
 
 const emitEvent = () => {
 	const openPostEvent = new CustomEvent("post:opened", {
@@ -61,7 +66,10 @@ const emitEvent = () => {
 						<i class="bi bi-chat-dots"></i>
 					</button>
 					<button class="btn text-danger" @click="toggleLike">
-						Meow
+						<span v-if="props.likeButtonText">
+							{{ strictCapitalize(props.likeButtonText) }}
+						</span>
+						<span v-else> Meow </span>
 						<i class="bi bi-heart-fill" v-if="isLiked"></i>
 						<i class="bi bi-heart" v-else></i>
 					</button>

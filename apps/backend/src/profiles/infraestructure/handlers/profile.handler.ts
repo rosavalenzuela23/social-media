@@ -3,6 +3,7 @@ import type { FastifyReply, FastifyRequest } from "fastify";
 import { type MultipartFile } from "@fastify/multipart";
 import { inject, injectable } from "tsyringe";
 import ProfileMapper from "../persistance/mappers/profile.mapper.js";
+import type { LikeTextEnum } from "@/profiles/domain/like.enum.js";
 
 @injectable()
 export default class ProfileController {
@@ -95,6 +96,31 @@ export default class ProfileController {
 		} catch (err) {
 			reply.status(400);
 			return { message: err.message };
+		}
+	}
+
+	async updateProfile(
+		request: FastifyRequest<{
+			Body: {
+				bio?: { value?: string };
+				likeText?: { value?: LikeTextEnum };
+				image?: MultipartFile;
+			};
+		}>,
+	) {
+		const { bio, likeText, image } = request.body;
+		const userUuid = request.session.user.uuid;
+
+		if (bio?.value || likeText?.value) {
+			await this.profileService.updateProfileInfo(userUuid, {
+				bio: bio?.value,
+				likeText: likeText?.value,
+			});
+		}
+
+		if (image) {
+			const fileBuffer: Buffer = await image.toBuffer();
+			await this.profileService.setProfilePicture(userUuid, fileBuffer);
 		}
 	}
 

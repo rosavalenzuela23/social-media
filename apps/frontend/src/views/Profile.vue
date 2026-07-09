@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { useIntersector } from "@/composables/useIntersector";
 import MainLayout from "@/layouts/MainLayout.vue";
 import type Profile from "@/models/profile";
 import type { Post } from "@/services/dto/post.dto";
@@ -21,6 +20,7 @@ const profileService = ProfileService.getInstance();
 const postService = PostService.getInstance();
 
 const posts = reactive<Post[]>([]);
+const userProfile = await profileService.getMyProfile();
 
 const openProfileSettings = () => {
 	const customEvent = new CustomEvent("openProfileSettings", {
@@ -72,7 +72,8 @@ if (profileId == "me") {
 					{{ profile?.username }}
 					<span v-if="profileId === 'me'"> (You) </span>
 				</div>
-				Bio soon!
+				<div v-if="!profile.bio" class="h-4"></div>
+				{{ profile.bio }}
 				<div class="card-subtitle">
 					<p class="badge">Friends {{ profile?.friendProfileList.length }}</p>
 				</div>
@@ -81,7 +82,12 @@ if (profileId == "me") {
 
 		<div class="flex flex-col items-center w-full">
 			<div class="flex flex-col gap-5 min-w-xl max-w-2xl">
-				<PostComponent v-for="post in posts" :key="post.uuid" :post="post" />
+				<PostComponent
+					v-for="post in posts"
+					:key="post.uuid"
+					:post="post"
+					:like-button-text="userProfile?.likeText"
+				/>
 			</div>
 		</div>
 	</MainLayout>

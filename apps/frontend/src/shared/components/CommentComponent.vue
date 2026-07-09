@@ -5,6 +5,7 @@ import { ref } from "vue";
 const props = defineProps<{
 	comment: Comment;
 	checked: boolean;
+	likeText?: string;
 }>();
 
 const emit = defineEmits(["likePressed"]);
@@ -34,11 +35,13 @@ const likeComment = async (comment: Comment) => {
 				<input type="checkbox" @change="() => likeComment(comment)" v-model="checkLike" />
 				<div class="swap-on">
 					<i class="bi bi-heart-fill"></i>
-					Meow
+					<span>{{ likeText }}</span>
+					<span>Meow</span>
 				</div>
 				<div class="swap-off">
 					<i class="bi bi-heart"></i>
-					Meow
+					<span>{{ likeText }}</span>
+					<span>Meow</span>
 				</div>
 			</label>
 		</div>

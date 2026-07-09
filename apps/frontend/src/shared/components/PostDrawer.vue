@@ -10,6 +10,8 @@ const modalRef = useTemplateRef("modalRef");
 const postService = PostService.getInstance();
 const profileService = ProfileService.getInstance();
 
+const userProfile = await profileService.getMyProfile();
+
 const eventListener = (e: CustomEvent<{ post: Post }>) => {
 	Object.assign(post, e.detail.post);
 	modalRef.value?.showModal();
@@ -86,11 +88,7 @@ onUnmounted(() => {
 				<div id="comments" v-for="comment in post?.comments" :key="comment.uuid">
 					<CommentComponent
 						:comment="comment"
-						:checked="
-							!!comment.likes?.find(
-								async (c) => c.userUuid === (await profileService.getMyProfile()).uuid,
-							)
-						"
+						:checked="!!comment.likes?.find(async (c) => c.userUuid === userProfile.uuid)"
 						@like-pressed="likeComment"
 					/>
 					<div class="divider"></div>

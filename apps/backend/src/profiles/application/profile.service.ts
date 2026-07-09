@@ -3,6 +3,7 @@ import { IProfileRepository } from "@/profiles/application/ports/profile.reposit
 import type Profile from "../domain/user.js";
 import { inject, injectable } from "tsyringe";
 import { IFileManager } from "./ports/file.manager.js";
+import { LikeTextEnum } from "../domain/like.enum.js";
 
 @injectable()
 export default class ProfileService {
@@ -75,6 +76,22 @@ export default class ProfileService {
 		}
 
 		return this.fileManager.getReadStreamFromFileName(profile.profilePictureName);
+	}
+
+	async updateProfileInfo(userId: string, data: { bio?: string; likeText?: LikeTextEnum }) {
+		const user = await this.profileRepository.getUserByUuid(userId);
+		if (!user) {
+			throw new UserNotFoundException("User not found");
+		}
+
+		user.bio = data.bio;
+		user.likeText = data.likeText;
+
+		try {
+			await this.profileRepository.updateUser(user);
+		} catch (err) {
+			throw new Error(err?.message || "Failed to update profile");
+		}
 	}
 
 	async setProfilePicture(userId: string, image: Buffer) {

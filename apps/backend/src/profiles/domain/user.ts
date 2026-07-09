@@ -1,3 +1,5 @@
+import type { LikeTextEnum } from "./like.enum.js";
+
 export default class Profile {
 	constructor(
 		public username: string,
@@ -5,6 +7,8 @@ export default class Profile {
 		public friendProfileList: Profile[],
 		public blockProfilesList: Profile[],
 		public profilePictureName?: string,
+		public bio?: string,
+		public likeText?: LikeTextEnum,
 	) {}
 
 	private itsMyProfile(profile: Profile): boolean {
