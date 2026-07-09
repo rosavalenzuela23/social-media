@@ -1,14 +1,14 @@
-<script setup async lang="ts">
-import { onMounted } from "vue";
+<script setup lang="ts">
+import { Suspense } from "vue";
 import { RouterView } from "vue-router";
-
-onMounted(async () => {});
+import { Toaster } from "vue-sonner";
 </script>
 
 <template>
-  <Suspense>
-    <RouterView></RouterView>
-  </Suspense>
+	<Toaster theme="system" :expand="true" />
+	<Suspense>
+		<RouterView></RouterView>
+	</Suspense>
 </template>
 
 <style scoped></style>

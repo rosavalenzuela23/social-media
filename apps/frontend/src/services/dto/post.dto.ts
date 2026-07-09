@@ -1,9 +1,33 @@
-type Post = {
-  creatorUsername: string;
-  creatorUuid: string;
-  message: string;
-  date: string;
-  imagesPaths: Array<string>;
+type Image = {
+	path: string;
+	uuid: string;
 };
 
-export type { Post };
+type Like = {
+	userUuid: string;
+	username: string;
+	postId: string;
+	createdAt: Date;
+};
+
+type Comment = {
+	uuid: string;
+	message: string;
+	creatorUuid: string;
+	creatorUsername: string;
+	postUuid: string;
+	likes: Like[];
+};
+
+type Post = {
+	creatorUsername: string;
+	uuid: string;
+	creatorUuid: string;
+	message: string;
+	date: string;
+	images: Array<Image>;
+	likes: Like[];
+	comments?: Comment[];
+};
+
+export type { Post, Image, Like, Comment };

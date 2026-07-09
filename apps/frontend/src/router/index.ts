@@ -15,8 +15,18 @@ const router = createRouter({
         },
       ],
     },
-
+    {
+      path: "/",
+      alias: "/",
+      redirect: "/feed",
+    },
     { path: "/feed", alias: "/feed", component: () => import("../views/FeedView.vue") },
+    {
+      path: "/profile/:profileId",
+      alias: "/profile/:profileId",
+      component: () => import("../views/Profile.vue"),
+    },
+    { path: "/:pathMatch(.*)*", component: () => import("../views/NotFoundPage.vue") },
   ],
 });
 

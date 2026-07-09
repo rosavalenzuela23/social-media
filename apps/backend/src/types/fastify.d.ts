@@ -1,17 +1,15 @@
-import 'fastify';
-import '@fastify/session';
+import "fastify";
+import "@fastify/session";
 
-declare module 'fastify' {
+declare module "fastify" {
+	interface Session {
+		user?: {
+			username: string;
+			uuid: string;
+		};
+	}
 
-    interface Session {
-        user?: {
-            username: string,
-            uuid: string
-        }
-    }
-
-    interface FastifyRequest {
-        files?: any
-    }
-
+	interface FastifyRequest {
+		files?: any;
+	}
 }

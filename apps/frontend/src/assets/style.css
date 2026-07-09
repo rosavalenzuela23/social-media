@@ -1,3 +1,4 @@
 @import "tailwindcss";
 @plugin "daisyui";
 @import "bootstrap-icons";
+@import "vue-sonner/style.css";

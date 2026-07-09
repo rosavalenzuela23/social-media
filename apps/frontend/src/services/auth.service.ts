@@ -33,7 +33,17 @@ export default class AuthService {
     } catch (err) {}
   }
 
-  async logout() {}
+  async logout() {
+    try {
+      const res = await axios.get("/api/users/logout/", {
+        withCredentials: true,
+      });
+      const message = res.data.message;
+      return message;
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   async register(opts: { email: string; password: string; username: string }) {
     try {

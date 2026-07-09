@@ -2,7 +2,6 @@ services:
   backend_postgres:
     image: postgres:18-alpine
     container_name: backend_postgres
-    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
@@ -15,7 +14,6 @@ services:
   backend_mongo:
     image: mongo:latest
     container_name: backend_mongo
-    restart: always
     ports:
       - "27017:27017"
     volumes:

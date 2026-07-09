@@ -40,15 +40,15 @@ const registerUser = async (event: SubmitEvent) => {
           name="register-form"
         >
           <input
-            class="input"
+            class="input w-full"
             type="text"
             name="username"
             placeholder="Username"
             v-model="username"
           />
-          <input class="input" type="text" name="email" placeholder="Email" v-model="email" />
+          <input class="input w-full" type="text" name="email" placeholder="Email" v-model="email" />
           <input
-            class="input"
+            class="input w-full"
             type="text"
             name="password"
             placeholder="Password"

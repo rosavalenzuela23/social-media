@@ -1,5 +1,5 @@
 interface IdUserParams {
-    uuid: string
+	uuid: string;
 }
 
 export type { IdUserParams };
