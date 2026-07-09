@@ -5,6 +5,7 @@ import ProfileService from "@/services/profile.service";
 import { onMounted, onUnmounted, reactive, useTemplateRef } from "vue";
 import CommentComponent from "./CommentComponent.vue";
 import { toast } from "vue-sonner";
+import ImageCarousel from "./ImageCarousel.vue";
 const modalRef = useTemplateRef("modalRef");
 
 const postService = PostService.getInstance();
@@ -81,11 +82,15 @@ onUnmounted(() => {
 			<div class="overflow-y-auto px-5 mb-15">
 				<div class="my-10">{{ post.message }}</div>
 
-				<div v-if="post.comments?.length == 0" class="justify-center flex text-2xl font-bold">
+				<figure class="max-h-[400px] overflow-hidden" v-if="post.images && post.images.length > 0">
+					<ImageCarousel :images="post.images"></ImageCarousel>
+				</figure>
+
+				<div v-if="post.comments?.length == 0" class="justify-center my-10 flex text-2xl font-bold">
 					<p>No comments yet!</p>
 				</div>
 
-				<div id="comments" v-for="comment in post?.comments" :key="comment.uuid">
+				<div id="comments" v-for="comment in post?.comments" :key="comment.uuid" class="my-10">
 					<CommentComponent
 						:comment="comment"
 						:checked="!!comment.likes?.find(async (c) => c.userUuid === userProfile.uuid)"

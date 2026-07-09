@@ -43,7 +43,7 @@ function nextImage() {
 				<ProtectedImage
 					:key="img.uuid"
 					:path="`/api/posts/images/${img.uuid}`"
-					class="h-[450px] w-full object-cover"
+					class="h-[450px] w-full"
 				></ProtectedImage>
 			</div>
 		</div>
@@ -64,4 +64,3 @@ function nextImage() {
 		</template>
 	</div>
 </template>
-
