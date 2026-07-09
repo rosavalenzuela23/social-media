@@ -85,7 +85,7 @@ function registerModules(app: FastifyInstance) {
 			httpOnly: true,
 			path: "/",
 			sameSite: "lax",
-			maxAge: 5300000,
+			maxAge: Number(process.env.SESSION_MS_DURATION) || 1000 * 60 * 10,
 		},
 	});
 }
