@@ -6,6 +6,9 @@
 	"author": "",
 	"type": "module",
 	"main": "app.js",
+	"pnpm": {
+		"onlyBuiltDependencies": ["bcrypt", "esbuild", "sharp"]
+	},
 	"scripts": {
 		"dev": "bun run --watch ./src/main.ts | pino-pretty",
 		"debug": "bun --inspect-wait ./src/main.ts",
