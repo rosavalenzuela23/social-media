@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import type { Post } from "@/services/dto/post.dto";
 import { Temporal } from "temporal-polyfill";
-import ProtectedImage from "./ProtectedImage.vue";
 import PostService from "@/services/posts.service.ts";
 import ProfileService from "@/services/profile.service.ts";
 import { ref, toRaw } from "vue";
+import PostBentoLayout from "./PostBentoLayout.vue";
 
 const props = defineProps<{ post: Post; likeButtonText?: string }>();
 const date = Temporal.Instant.from(props.post.date).toZonedDateTimeISO("UTC");
@@ -49,10 +49,10 @@ const emitEvent = () => {
 			{{ props.post.message }}
 
 			<figure
-				class="bg-red-400 min-h-[450px]"
+				class="bg-red-400 min-h-[450px] max-h-[450px]"
 				v-if="props.post.images && props.post.images.length > 0"
 			>
-				<ProtectedImage :path="props.post.images[0]!.uuid" class="h-[100px]"></ProtectedImage>
+				<PostBentoLayout :images="props.post.images"></PostBentoLayout>
 			</figure>
 
 			<div class="card-actions flex justify-between p-5">
@@ -62,16 +62,16 @@ const emitEvent = () => {
 
 				<div class="flex gap-3 text-white">
 					<button class="btn" @click="emitEvent">
-						Comment
 						<i class="bi bi-chat-dots"></i>
+						Comment
 					</button>
 					<button class="btn text-danger" @click="toggleLike">
+						<i class="bi bi-heart-fill" v-if="isLiked"></i>
+						<i class="bi bi-heart" v-else></i>
 						<span v-if="props.likeButtonText">
 							{{ strictCapitalize(props.likeButtonText) }}
 						</span>
 						<span v-else> Meow </span>
-						<i class="bi bi-heart-fill" v-if="isLiked"></i>
-						<i class="bi bi-heart" v-else></i>
 					</button>
 				</div>
 			</div>

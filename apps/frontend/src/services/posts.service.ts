@@ -79,16 +79,16 @@ export default class PostService {
 	}
 
 	async createPost(content: string, images?: any) {
-		const data: { content: string; images?: any } = {
-			content,
-		};
+		const formData = new FormData();
 
-		if (images) {
-			data.images = images;
+		formData.set("content", content);
+
+		for (const image of images) {
+			formData.append("images", image);
 		}
 
 		try {
-			const res = await axios.post(`/api/posts/`, data, {
+			const res = await axios.post(`/api/posts/`, formData, {
 				withCredentials: true,
 				headers: {
 					"Content-Type": "multipart/form-data",

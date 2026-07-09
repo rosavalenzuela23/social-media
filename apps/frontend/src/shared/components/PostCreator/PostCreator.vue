@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import PostService from "@/services/posts.service";
 import hotheys from "hotkeys-js";
-import { onMounted, onUnmounted, ref, useId } from "vue";
+import { onMounted, onUnmounted, ref, useId, useTemplateRef } from "vue";
 
 const formId = useId();
 const modalId = useId();
 const message = ref();
 
 const postService = PostService.getInstance();
+
+const fileInput = useTemplateRef("fileInput");
 
 function toggleModal() {
 	const modal = document.getElementById(`${modalId}`) as HTMLDialogElement;
@@ -17,11 +19,12 @@ function toggleModal() {
 
 async function createPostEvent(event: SubmitEvent) {
 	event.preventDefault();
-	const formData = new FormData(event.target as HTMLFormElement);
 
-	let images = formData.get("images") as File | File[] | null | undefined;
+	let images = fileInput.value?.files;
 
-	if (!(images.name || images.length >= 0)) images = undefined;
+  if (!images || images.length == 0) {
+		images = undefined;
+	}
 
 	await postService.createPost(message.value, images);
 	toggleModal();
@@ -70,7 +73,14 @@ onUnmounted(() => {
 					placeholder="Say what whatever you're thinking!"
 					@keydown.ctrl.enter="requestSubmit()"
 				></textarea>
-				<input type="file" name="images" class="file-input w-full" />
+				<input
+					type="file"
+					name="images"
+					accept="image/*"
+					ref="fileInput"
+					multiple
+					class="file-input w-full"
+				/>
 			</form>
 
 			<button :form="formId" type="submit" class="btn btn-primary mt-6">
