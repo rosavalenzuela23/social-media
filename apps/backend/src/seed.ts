@@ -6,6 +6,8 @@ import UserEntity from './auth/infraestructure/persistance/entities/user.entity.
 import ProfileEntity from './profiles/infraestructure/persistance/entities/profile.entity.js';
 import PostEntity from './posts/infrastructure/persistance/entities/post.entity.js';
 import bcrypt from 'bcrypt';
+import { seedPosts } from './posts.seed.js';
+
 
 async function seed() {
   try {
@@ -41,7 +43,7 @@ async function seed() {
       user.name = seed.name;
       user.username = seed.username;
       user.password = hashedPassword;
-      
+
       const savedUser = await mongoDataSource.getRepository(UserEntity).save(user);
 
       const profile = new ProfileEntity();
@@ -84,53 +86,30 @@ async function seed() {
     console.log('Friend links established.');
 
     console.log('Seeding posts...');
-    const postsData = [
-      {
-        username: 'johndoe',
-        message: 'Excited to join this brand new social network! Hello world!',
-        createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
-      },
-      {
-        username: 'janesmith',
-        message: 'Had a beautiful hike in the mountains today. Nature is healing 🌲⛰️',
-        createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
-      },
-      {
-        username: 'alicej',
-        message: 'Writing some clean code using TypeScript and TypeORM today. Love it!',
-        createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
-      },
-      {
-        username: 'bobb',
-        message: "Anyone watching the match tonight? Let's discuss!",
-        createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
-      },
-      {
-        username: 'charlieg',
-        message: 'Thinking about what to cook for dinner. Maybe some pasta?',
-        createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000),
-      },
-      {
-        username: 'johndoe',
-        message: 'Just shared a cup of coffee with a friend. Good conversations are the best.',
-        createdAt: new Date(Date.now() - 30 * 60 * 1000),
-      },
-    ];
 
-    for (const p of postsData) {
+    for (const p of seedPosts) {
       const profile = profilesMap.get(p.username);
-      if (profile) {
-        const post = new PostEntity();
-        post.creatorUuid = profile.uuid;
-        post.creatorUsername = profile.username;
-        post.message = p.message;
-        post.createdAt = p.createdAt;
-        post.userUuidExcludeList = [];
-        post.postImages = [];
-        await mongoDataSource.getRepository(PostEntity).save(post);
-        console.log(`Created post by ${p.username}: "${p.message.slice(0, 30)}..."`);
-      }
+      if (!profile) continue;
+
+      const post = new PostEntity();
+      post.creatorUuid = profile.uuid;
+      post.creatorUsername = profile.username;
+      post.message = p.message;
+
+      post.createdAt = new Date(
+        Date.now() - p.createdAtOffsetMinutes * 60 * 1000
+      );
+
+      post.userUuidExcludeList = [];
+      post.postImages = [];
+
+      await mongoDataSource.getRepository(PostEntity).save(post);
+
+      console.log(
+        `Created post by ${p.username} [${p.tags?.join(', ')}]: "${p.message.slice(0, 40)}..."`
+      );
     }
+
 
     console.log('Database seeding completed successfully!');
   } catch (error) {

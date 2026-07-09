@@ -1,0 +1,9 @@
+playwright
+beautifulsoup4
+pydantic
+torch
+torchvision
+pandas
+matplotlib
+python-dotenv
+opencv-python
