@@ -22,7 +22,7 @@ export default class PostMapper {
 		return postEntity;
 	}
 
-	static toDto(post: Post) {
+	static toDto(post: Post, includeComments: boolean = true) {
 		return {
 			creatorUuid: post.creatorUuid,
 			creatorUsername: post.creatorUsername,
@@ -30,7 +30,15 @@ export default class PostMapper {
 			date: post.date,
 			images: post.images?.map((image) => ImageMapper.toDto(image)),
 			uuid: post.uuid,
-			comments: post.comments?.map((comment) => CommentMapper.toDto(comment)) || [],
+			comments: includeComments
+				? {
+						total: post.comments.length,
+						list: post.comments?.map((comment) => CommentMapper.toDto(comment)),
+					}
+				: {
+						total: post.comments.length,
+						list: null,
+					},
 			likes: post.likes?.map((like) => LikeMapper.toDto(like)) || [],
 		};
 	}
@@ -47,7 +55,6 @@ export default class PostMapper {
 			.setLikes(postEntity.likes?.map((like) => LikeMapper.toDomain(like)))
 			.build();
 
-		console.log(postEntity.comments);
 		return post;
 	}
 }

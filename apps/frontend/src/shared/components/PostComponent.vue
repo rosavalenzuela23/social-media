@@ -63,7 +63,10 @@ const emitEvent = () => {
 				<div class="flex gap-3 text-white">
 					<button class="btn" @click="emitEvent">
 						<i class="bi bi-chat-dots"></i>
-						Comment
+						Comments
+						<span v-if="post.comments?.total && post.comments.total > 0">
+							{{ post.comments.total }}
+						</span>
 					</button>
 					<button class="btn text-danger" @click="toggleLike">
 						<i class="bi bi-heart-fill" v-if="isLiked"></i>
