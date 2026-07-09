@@ -16,12 +16,18 @@ export default class ProfileService {
 	}
 
 	async getMyProfile(update: boolean = false): Promise<Profile> {
-		if (this.profile && !update) return this.profile;
+		const json = localStorage.getItem("profile_information");
+
+		if (json && !update) return JSON.parse(json);
+
 		try {
 			const res = await axios.get<Profile>(`/api/profiles/me`, {
 				withCredentials: true,
 			});
 			this.profile = res.data;
+
+			localStorage.setItem("profile_information", JSON.stringify(this.profile));
+
 			return this.profile;
 		} catch (err) {
 			console.log(err);
@@ -46,10 +52,7 @@ export default class ProfileService {
 	}
 
 	async updateProfileInfo(formData: FormData) {
-		const data = new FormData();
-		data.set("image", formData.get("profile-picture")!);
-
-		await axios.post("/api/profiles/me/picture", data, {
+		await axios.put("/api/profiles/me", formData, {
 			withCredentials: true,
 		});
 	}
