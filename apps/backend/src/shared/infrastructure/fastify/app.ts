@@ -8,12 +8,12 @@ import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 import postRoutes from "@posts/infrastructure/routes.js";
 import profileRoutes from "@profiles/infraestructure/routes.js";
-import MongoStore from "connect-mongo";
 import fastify, { type FastifyInstance } from "fastify";
 import fs from "fs";
 import type { IncomingMessage, ServerResponse } from "http";
 import type { Http2ServerRequest, Http2ServerResponse, SecureServerOptions } from "http2";
 import "reflect-metadata";
+import { getRedisStore } from "./redis-store.js";
 
 function getHttpsConfig():
 	| SecureServerOptions<
@@ -77,9 +77,7 @@ function registerModules(app: FastifyInstance) {
 		secret: process.env.FASTIFY_SESSION_SECRET,
 		saveUninitialized: false,
 		rolling: false,
-		store: MongoStore.create({
-			mongoUrl: process.env.MONGO_URL,
-		}),
+		store: getRedisStore(),
 		cookie: {
 			secure: process.env.OVER_HTTPS === "true",
 			httpOnly: true,
