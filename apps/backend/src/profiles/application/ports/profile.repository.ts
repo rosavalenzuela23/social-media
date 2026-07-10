@@ -2,7 +2,13 @@ import Profile from "@profiles/domain/user.js";
 
 interface IProfileRepository {
 	getAllUsers(): Promise<Profile[]>;
-	createProfile(uuid: string, username: string, name: string): Promise<Profile>;
+	createProfile(
+		uuid: string,
+		username: string,
+		name: string,
+		interests: string[],
+		biography?: string,
+	): Promise<Profile>;
 	getUserByUsername(username: string): Promise<Profile | null>;
 	getUserByUuid(uuid: string): Promise<Profile | null>;
 	updateUser(user: Profile): Promise<void>;

@@ -4,64 +4,65 @@ import { injectable } from "inversify";
 
 @injectable()
 export default class AuthService {
-  private static instance: AuthService;
+	private static instance: AuthService;
 
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new AuthService();
-    }
-    return this.instance;
-  }
+	static getInstance() {
+		if (!this.instance) {
+			this.instance = new AuthService();
+		}
+		return this.instance;
+	}
 
-  async getCurrentUser() {}
+	async getCurrentUser() {}
 
-  async login(username: string, password: string) {
-    try {
-      const res = await axios.post(
-        `/api/users/login/`,
-        {
-          username,
-          password,
-        },
-        {
-          withCredentials: true,
-        },
-      );
+	async login(username: string, password: string) {
+		try {
+			const res = await axios.post(
+				`/api/users/login/`,
+				{
+					username,
+					password,
+				},
+				{
+					withCredentials: true,
+				},
+			);
 
-      const message = res.data.message;
-      return message;
-    } catch (err) {}
-  }
+			const message = res.data.message;
+			return message;
+		} catch (err) {}
+	}
 
-  async logout() {
-    try {
-      const res = await axios.get("/api/users/logout/", {
-        withCredentials: true,
-      });
-      const message = res.data.message;
-      return message;
-    } catch (err) {
-      console.error(err);
-    }
-  }
+	async logout() {
+		try {
+			const res = await axios.get("/api/users/logout/", {
+				withCredentials: true,
+			});
+			const message = res.data.message;
+			return message;
+		} catch (err) {
+			console.error(err);
+		}
+	}
 
-  async register(opts: { email: string; password: string; username: string }) {
-    try {
-      const res = await axios.post<UserRegisteredDto>(
-        `/api/users/`,
-        {
-          username: opts.username,
-          email: opts.email,
-          password: opts.password,
-        },
-        {
-          withCredentials: true,
-        },
-      );
-      const message = res.data.message;
-      return message;
-    } catch (err) {
-      console.log(err);
-    }
-  }
+	async register(opts: { email: string; password: string; username: string }) {
+		try {
+			const res = await axios.post<UserRegisteredDto>(
+				`/api/users/`,
+				{
+					username: opts.username,
+					email: opts.email,
+					password: opts.password,
+				},
+				{
+					withCredentials: true,
+				},
+			);
+			const message = res.data.message;
+			return message;
+		} catch (err) {
+			console.log(err);
+			throw err;
+		}
+	}
 }

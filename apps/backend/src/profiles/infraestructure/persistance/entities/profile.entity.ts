@@ -37,6 +37,11 @@ export default class ProfileEntity {
 	public uuidBlockList: string[] = [];
 
 	@Column({
+		type: "json",
+	})
+	public interests: string[] = [];
+
+	@Column({
 		type: "enum",
 		enum: LikeTextEnum,
 		default: LikeTextEnum.MEOW,

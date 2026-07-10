@@ -18,20 +18,38 @@ export default class ProfileController {
 		request: FastifyRequest<{
 			Body: {
 				name: string;
+				interests: string[];
+				biography?: string;
+				image?: string;
 			};
 		}>,
 		reply: FastifyReply,
 	) {
 		const name = request.body.name;
+
+		const interests = request.body.interests;
+		const biography = request.body.biography;
+		const image = request.body.image;
+
 		const userUuid = request.session.user.uuid;
 		const username = request.session.user.username;
 
 		try {
-			return await this.profileService.createProfile({
+			const profile = await this.profileService.createProfile({
 				name,
 				username,
 				uuid: userUuid,
+				interests,
+				biography,
 			});
+
+			if (image) {
+				const base64String = image.replace(/^data:[a-zA-Z0-9\/\+\-\.]+;base64,/, "");
+				const imageBuffer: Buffer = Buffer.from(base64String, "base64");
+				await this.profileService.setProfilePicture(userUuid, imageBuffer);
+			}
+
+			return profile;
 		} catch (err) {
 			reply.status(400);
 			return { message: err.message };

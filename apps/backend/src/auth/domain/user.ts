@@ -7,5 +7,6 @@ export default class User {
 		public password: string,
 		public uuid: string,
 		public roles: Role[] = [],
+		public lastLogin: Date | null = null,
 	) {}
 }

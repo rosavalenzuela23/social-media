@@ -37,8 +37,10 @@ test("Create profile", async () => {
 	expect(profile).toEqual({
 		uuid: "uuid",
 		username: "username",
+		name: "name",
 		friendProfileList: [],
 		blockProfilesList: [],
+		interests: [],
 	});
 });
 

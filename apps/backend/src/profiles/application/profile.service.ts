@@ -120,9 +120,17 @@ export default class ProfileService {
 		uuid: string;
 		username: string;
 		name: string;
+		interests: string[];
+    biography?: string
 	}): Promise<Profile | { message: string }> {
 		try {
-			return await this.profileRepository.createProfile(params.uuid, params.username, params.name);
+			return await this.profileRepository.createProfile(
+				params.uuid,
+				params.username,
+				params.name,
+				params.interests,
+        params.biography
+			);
 		} catch (err) {
 			throw new Error(err?.message || "Profile already exists");
 		}

@@ -15,7 +15,7 @@ export default class ProfileService {
 		return this.instance;
 	}
 
-	async getMyProfile(update: boolean = false): Promise<Profile> {
+	async getMyProfile(update: boolean = true): Promise<Profile> {
 		const json = localStorage.getItem("profile_information");
 
 		if (json && !update) return JSON.parse(json);
@@ -35,20 +35,32 @@ export default class ProfileService {
 		}
 	}
 
-	async createProfile(profileName: string) {
-		try {
-			await axios.post(
-				`/api/profiles/me`,
-				{
-					name: profileName,
-				},
-				{
-					withCredentials: true,
-				},
-			);
-		} catch {
-			console.log("");
+	async createProfile(profileName: string, interests: string[], biography?: string, image?: File) {
+		const formdata = {
+			name: profileName,
+			interests,
+		};
+
+		if (biography) {
+			formdata.biography = biography;
 		}
+
+		if (image) {
+			const fileToBase64 = (file) =>
+				new Promise((resolve, reject) => {
+					const reader = new FileReader();
+					reader.readAsDataURL(file);
+					reader.onload = () => resolve(reader.result);
+					reader.onerror = (error) => reject(error);
+				});
+
+			const base64Image = await fileToBase64(image);
+			formdata.image = base64Image;
+		}
+
+		await axios.post(`/api/profiles/me`, formdata, {
+			withCredentials: true,
+		});
 	}
 
 	async updateProfileInfo(formData: FormData) {
