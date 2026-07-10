@@ -83,8 +83,10 @@ export default class PostService {
 
 		formData.set("content", content);
 
-		for (const image of images) {
-			formData.append("images", image);
+		if (images) {
+			for (const image of images) {
+				formData.append("images", image);
+			}
 		}
 
 		try {

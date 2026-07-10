@@ -30,7 +30,9 @@ export default class AuthService {
 
 			const message = res.data.message;
 			return message;
-		} catch (err) {}
+		} catch (err) {
+			throw err;
+		}
 	}
 
 	async logout() {
