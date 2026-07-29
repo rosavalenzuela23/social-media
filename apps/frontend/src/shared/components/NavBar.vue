@@ -1,5 +1,5 @@
 <template>
-	<nav class="navbar w-full bg-base-100 shadow-md fixed z-1">
+	<nav class="navbar w-full bg-base-100 shadow-md fixed z-100">
 		<label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
 			<!-- Sidebar toggle icon -->
 			<svg

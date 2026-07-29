@@ -69,7 +69,7 @@ if (profileId == "me") {
 						</div>
 					</div>
 
-					{{ profile?.username }}
+					{{ profile.name || profile!.username }}
 					<span v-if="profileId === 'me'"> (You) </span>
 				</div>
 				<div v-if="!profile.bio" class="h-4"></div>

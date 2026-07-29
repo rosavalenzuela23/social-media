@@ -34,11 +34,11 @@ async function seed() {
 
 		console.log("Seeding users and profiles...");
 		const seedUsers = [
-			{ name: "John Doe", username: "johndoe" },
-			{ name: "Jane Smith", username: "janesmith" },
-			{ name: "Alice Johnson", username: "alicej" },
-			{ name: "Bob Brown", username: "bobb" },
-			{ name: "Charlie Green", username: "charlieg" },
+			{ name: "John Doe", username: "johndoe", interests: ["cats", "dogs"] },
+			{ name: "Jane Smith", username: "janesmith", interests: ["cats"] },
+			{ name: "Alice Johnson", username: "alicej", interests: ["snakes", "cats"] },
+			{ name: "Bob Brown", username: "bobb", interests: ["dogs", "snakes"] },
+			{ name: "Charlie Green", username: "charlieg", interests: ["snakes"] },
 		];
 
 		const profilesMap = new Map<string, ProfileEntity>();
@@ -57,6 +57,7 @@ async function seed() {
 			profile.username = seed.username;
 			profile.uuidFriendList = [];
 			profile.uuidBlockList = [];
+			profile.interests = seed.interests;
 
 			const savedProfile = await postgresDataSource.getRepository(ProfileEntity).save(profile);
 			profilesMap.set(seed.username, savedProfile);

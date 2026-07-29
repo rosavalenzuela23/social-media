@@ -4,7 +4,7 @@ import { Temporal } from "temporal-polyfill";
 import PostService from "@/services/posts.service.ts";
 import ProfileService from "@/services/profile.service.ts";
 import { ref, toRaw } from "vue";
-import PostBentoLayout from "./PostBentoLayout.vue";
+import ImageCarousel from "./ImageCarousel.vue";
 
 const props = defineProps<{ post: Post; likeButtonText?: string }>();
 const date = Temporal.Instant.from(props.post.date).toZonedDateTimeISO("UTC");
@@ -22,7 +22,7 @@ const toggleLike = async () => {
 	isLiked.value = !isLiked.value;
 };
 
-function strictCapitalize(str) {
+function strictCapitalize(str: string) {
 	if (!str) return "";
 	return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
@@ -49,10 +49,10 @@ const emitEvent = () => {
 			{{ props.post.message }}
 
 			<figure
-				class="bg-red-400 min-h-[450px] max-h-[450px]"
+				class="min-h-[450px] max-h-[450px] overflow-hidden"
 				v-if="props.post.images && props.post.images.length > 0"
 			>
-				<PostBentoLayout :images="props.post.images"></PostBentoLayout>
+				<ImageCarousel :images="props.post.images"></ImageCarousel>
 			</figure>
 
 			<div class="card-actions flex justify-between p-5">
@@ -63,7 +63,10 @@ const emitEvent = () => {
 				<div class="flex gap-3 text-white">
 					<button class="btn" @click="emitEvent">
 						<i class="bi bi-chat-dots"></i>
-						Comment
+						Comments
+						<span v-if="post.comments?.total && post.comments.total > 0">
+							{{ post.comments.total }}
+						</span>
 					</button>
 					<button class="btn text-danger" @click="toggleLike">
 						<i class="bi bi-heart-fill" v-if="isLiked"></i>

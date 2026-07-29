@@ -23,7 +23,13 @@ export default class PostgresRepository implements IProfileRepository {
 		return usersEntity.map((userEntity) => ProfileMapper.toDomain(userEntity));
 	}
 
-	async createProfile(uuid: string, username: string, name: string): Promise<Profile> {
+	async createProfile(
+		uuid: string,
+		username: string,
+		name: string,
+		interests: string[],
+		biography?: string,
+	): Promise<Profile> {
 		const profile = await this.getUserByUsername(username);
 
 		if (profile) {
@@ -35,6 +41,8 @@ export default class PostgresRepository implements IProfileRepository {
 		profileEntity.uuid = uuid;
 		profileEntity.name = name;
 		profileEntity.username = username;
+		profileEntity.interests = interests;
+		profileEntity.bio = biography;
 
 		const saveProfile = await this.profileRepository.save(profileEntity);
 

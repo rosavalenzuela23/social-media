@@ -18,6 +18,7 @@ export default class UserService {
 			throw new UserNotFoundException("Invalid password");
 		}
 
+		user.lastLogin = new Date();
 		return user;
 	}
 

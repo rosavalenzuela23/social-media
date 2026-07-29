@@ -43,7 +43,7 @@ class PostController {
 	async getUserLoggedPosts(request: FastifyRequest) {
 		const userId = request.session.user!.uuid;
 		const posts = await this.postsService.getUserPosts(userId);
-		return posts.map((post) => PostMapper.toDto(post));
+		return posts.map((post) => PostMapper.toDto(post, false));
 	}
 
 	async getFeed(
@@ -56,7 +56,9 @@ class PostController {
 	) {
 		const page = request.query.page;
 		const size = request.query.size;
-		return await this.postsService.getFeed(page, size, request.session.user!.uuid);
+
+		const posts = await this.postsService.getFeed(page, size, request.session.user!.uuid);
+		return posts.map((p) => PostMapper.toDto(p, false));
 	}
 
 	async getImageByuuid(request: FastifyRequest<{ Params: { uuid: string } }>, reply: FastifyReply) {
@@ -159,7 +161,9 @@ class PostController {
 
 		const buffers = [];
 
+		console.log(images);
 		if (images) {
+			console.log(images.length);
 			for (const image of images) {
 				const buffer = await image.toBuffer();
 				buffers.push(buffer);

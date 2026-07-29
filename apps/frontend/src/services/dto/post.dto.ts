@@ -27,7 +27,10 @@ type Post = {
 	date: string;
 	images: Array<Image>;
 	likes: Like[];
-	comments?: Comment[];
+	comments?: {
+		total: number;
+		list: Comment[];
+	};
 };
 
 export type { Post, Image, Like, Comment };
