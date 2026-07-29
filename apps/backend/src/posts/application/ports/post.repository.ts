@@ -8,7 +8,13 @@ interface IPostRepository {
 		size: number,
 		userUuidExclude?: string[],
 	): Promise<Post[]>;
-
+	getFeed(
+		userUuid: string,
+		page: number,
+		size: number,
+		userUuidExclude?: string[],
+		categories?: string[],
+	): Promise<Post[]>;
 	getUserPosts(userId: string): Promise<Post[]>;
 	createPost(post: Post): Promise<void>;
 	getImageByUuid(uuid: string): Promise<Image>;

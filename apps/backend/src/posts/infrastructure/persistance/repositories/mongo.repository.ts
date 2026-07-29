@@ -15,6 +15,8 @@ export default class MongoRepository implements IPostRepository {
 		size: number,
 		userUuidExcludeList?: string[],
 	): Promise<Post[]> {
+		const blockedUsers = userUuidExcludeList ?? [];
+
 		const posts = await this.dbContainer.getRepository(PostEntity).find({
 			skip: page * size,
 			take: size,
@@ -26,9 +28,43 @@ export default class MongoRepository implements IPostRepository {
 					$nin: [userUuid],
 				},
 				creatorUuid: {
-					$nin: userUuidExcludeList,
+					$nin: blockedUsers,
 				},
+			} as any,
+		});
+		return posts.map((post) => PostMapper.toDomain(post));
+	}
+
+	async getFeed(
+		userUuid: string,
+		page: number,
+		size: number,
+		userUuidExcludeList?: string[],
+		categories?: string[],
+	): Promise<Post[]> {
+		if (!categories?.length) {
+			return [];
+		}
+
+		const blockedUsers = userUuidExcludeList ?? [];
+
+		const posts = await this.dbContainer.getRepository(PostEntity).find({
+			skip: page * size,
+			take: size,
+			order: {
+				createdAt: "DESC",
 			},
+			where: {
+				userUuidExcludeList: {
+					$nin: [userUuid],
+				},
+				creatorUuid: {
+					$nin: blockedUsers,
+				},
+				categories: {
+					$in: categories,
+				},
+			} as any,
 		});
 		return posts.map((post) => PostMapper.toDomain(post));
 	}
@@ -57,17 +93,17 @@ export default class MongoRepository implements IPostRepository {
 		const postEntity = await this.dbContainer.getRepository(PostEntity).findOneOrFail({
 			where: {
 				"postImages.uuid": uuid,
-			},
+			} as any,
 			relations: {
 				postImages: true,
 			},
 			select: {
-				id: true,
+				_id: true,
 				postImages: {
 					path: true,
 					uuid: true,
 				},
-			},
+			} as any,
 		});
 
 		return ImageMapper.toDomain(postEntity.postImages.find((image) => image.uuid === uuid));

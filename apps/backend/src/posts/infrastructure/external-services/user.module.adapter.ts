@@ -18,6 +18,11 @@ class UserExternalService implements IUserModulePort {
 		const blockedUsers = await this.userService.getBlockedUuidListProfileListByUserUuid(userUuid);
 		return blockedUsers;
 	}
+
+	async getUserInterests(userUuid: string): Promise<string[]> {
+		const profile = await this.userService.getProfileByUuid(userUuid);
+		return profile?.interests ?? [];
+	}
 }
 
 export default UserExternalService;

@@ -17,12 +17,22 @@ export default class Post {
 	) {}
 }
 
-enum Category {
-Cat,
-Dog,
-Snake,
-Other
+export enum Category {
+  Cat = "cats",
+  Dog = "dogs",
+  Snake = "snakes",
+  Other = "other",
 }
+
+const CATEGORY_BY_LABEL: Record<string, Category> = {
+  cat: Category.Cat,
+  cats: Category.Cat,
+  dog: Category.Dog,
+  dogs: Category.Dog,
+  snake: Category.Snake,
+  snakes: Category.Snake,
+  other: Category.Other,
+};
 
 export class PostBuilder {
 	private creatorUuid?: string;
@@ -34,7 +44,7 @@ export class PostBuilder {
 	private comments: Comment[] = [];
 	private uuid?: string;
 	private likes: Like[] = [];
-  private categories: Category[];
+  private categories: Category[] = [];
 
 	public setCreator(uuid: string, username: string): PostBuilder {
 		this.creatorUuid = uuid;
@@ -67,6 +77,24 @@ export class PostBuilder {
 		return this;
 	}
 
+  public setCategories(categoriesStr: string[]): PostBuilder {
+    categoriesStr.forEach((element) => {
+      const category = this.stringToCategory(element);
+
+      if (!this.categories.includes(category)) {
+        this.categories.push(category);
+      }
+    });
+
+    return this;
+}
+
+  private stringToCategory(categoryStr: string): Category {
+    const normalizedStr = categoryStr.trim().toLowerCase();
+
+    return CATEGORY_BY_LABEL[normalizedStr] ?? Category.Other;
+  }
+
 	public setComments(comments: Comment[]): PostBuilder {
 		this.comments = comments;
 		return this;
@@ -82,16 +110,10 @@ export class PostBuilder {
 		return this;
 	}
 
-  	public addCategory(category: Category) {
-		this.categories.push(category)
-		return this;
-	}
-
 	public build(): Post {
 		if (!this.creatorUsername || !this.creatorUuid || !this.message) {
 			throw new Error("Required fields are missing: creatorUuid, creatorUsername, message");
 		}
-
 		return new Post(
 			this.creatorUuid,
 			this.creatorUsername,
@@ -102,6 +124,8 @@ export class PostBuilder {
 			this.comments,
 			this.uuid,
 			this.likes,
+      this.categories,
 		);
+
 	}
 }

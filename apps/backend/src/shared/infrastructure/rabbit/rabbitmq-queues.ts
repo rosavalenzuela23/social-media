@@ -1,4 +1,5 @@
 import { Connection } from 'rabbitmq-client';
+import type { RPCClient } from 'rabbitmq-client';
 import type { Publisher, Consumer } from 'rabbitmq-client';
 
 export class RabbitMQService {
@@ -30,8 +31,14 @@ export class RabbitMQService {
   }
 
   /**
-   * Create a publisher for a specific exchange
+   * Create an RPC Client for Request-Reply operations
    */
+  public createRPCClient(confirm = true): RPCClient {
+    return this.connection.createRPCClient({
+      confirm,
+    });
+  }
+
   public createPublisher(exchange: string): Publisher {
     return this.connection.createPublisher({
       confirm: true,
@@ -40,9 +47,6 @@ export class RabbitMQService {
     });
   }
 
-  /**
-   * Create a consumer for a specific queue
-   */
   public createConsumer(
     queueName: string,
     handler: (msg: any) => Promise<void>
@@ -58,9 +62,6 @@ export class RabbitMQService {
     );
   }
 
-  /**
-   * Graceful shutdown
-   */
   public async close(): Promise<void> {
     await this.connection.close();
   }

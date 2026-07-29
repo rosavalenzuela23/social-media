@@ -13,6 +13,7 @@ export default class PostMapper {
 		postEntity.createdAt = post.date;
 		postEntity.postImages = post.images?.map((image) => ImageMapper.toEntity(image));
 		postEntity.userUuidExcludeList = post.userUuidExcludeList || [];
+		postEntity.categories = post.categories || [];
 		if (post.comments) {
 			postEntity.comments = post.comments.map((comment) => CommentMapper.toEntity(comment));
 		}
@@ -40,6 +41,7 @@ export default class PostMapper {
 						list: null,
 					},
 			likes: post.likes?.map((like) => LikeMapper.toDto(like)) || [],
+			categories: post.categories || [],
 		};
 	}
 
@@ -50,6 +52,7 @@ export default class PostMapper {
 			.setDate(postEntity.createdAt)
 			.setExcludeList(postEntity.userUuidExcludeList)
 			.addImages(postEntity.postImages?.map((image) => ImageMapper.toDomain(image)))
+			.setCategories(postEntity.categories || [])
 			.setUuid(postEntity.uuid)
 			.setComments(postEntity.comments?.map((comment) => CommentMapper.toDomain(comment)))
 			.setLikes(postEntity.likes?.map((like) => LikeMapper.toDomain(like)))

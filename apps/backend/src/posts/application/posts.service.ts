@@ -18,6 +18,7 @@ export default class PostService {
 
 	async getFeed(page: number, size: number, userUuid: string) {
 		let blockedUsersUuid: string[] = [];
+		let userInterests: string[] = [];
 
 		try {
 			blockedUsersUuid = await this.userModulePort.getBlockedUsersUuid(userUuid);
@@ -25,7 +26,22 @@ export default class PostService {
 			console.error(error);
 		}
 
-		return await this.postRepository.getAllPosts(userUuid, page, size, blockedUsersUuid);
+		try {
+			const interests = await this.userModulePort.getUserInterests(userUuid);
+			userInterests = [
+				...new Set(interests.map((interest) => interest.trim().toLowerCase()).filter(Boolean)),
+			];
+		} catch (error) {
+			console.error(error);
+		}
+
+		return await this.postRepository.getFeed(
+			userUuid,
+			page,
+			size,
+			blockedUsersUuid,
+			userInterests,
+		);
 	}
 
 	async getUserPosts(creatorUuid: string) {
@@ -33,6 +49,10 @@ export default class PostService {
 	}
 
 	async createPost(userUuid: string, username: string, message: string, imagesBuffer?: Buffer[]) {
+
+    const rabbitService = RabbitMQService.getInstance(process.env.RABBITMQ_URL);
+    const rpcClient = rabbitService.createRPCClient();
+
 		//Obtener toda la informacion del usuario
 		const images: Image[] = [];
 		try {
@@ -43,25 +63,21 @@ export default class PostService {
 				images.push(image);
 			}
 
+      const response = await rpcClient.send(
+      { exchange: 'cnn-exchange', routingKey: 'cnn-queue' },
+      { message: images }
+    );
+    await rpcClient.close();
 
+    const categories = response.body as string[];
 			const post = new PostBuilder()
 				.setCreator(userUuid, username)
 				.setMessage(message)
 				.setDate(new Date())
 				.setExcludeList([])
 				.addImages(images)
+        .setCategories(categories)
 				.build();
-
-      //ask categories
-      const rabbitService = RabbitMQService.getInstance(process.env.RABBITMQ_URL);
-
-      // Consuming
-      const publisher = rabbitService.createPublisher('cnn-exchange')
-      await publisher.send(
-        { exchange: 'cnn-exchange', routingKey: 'cnn-queue' },
-        { message: images}
-      );
-      await publisher.close();
 
 			return await this.postRepository.createPost(post);
 		} catch (error) {

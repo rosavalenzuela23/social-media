@@ -36,6 +36,9 @@ export default class PostEntity {
 	@Column(() => LikeEntity)
 	likes: LikeEntity[];
 
+	@Column({ type: "array" })
+	categories: string[] = [];
+
 	@BeforeInsert()
 	beforeInsert() {
 		if (!this.uuid) {
